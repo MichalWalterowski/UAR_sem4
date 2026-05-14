@@ -29,7 +29,7 @@
 
         //void sendMsg(const QJsonObject &json, int numCli);
 
-        void wyslijProbke(double wartosc, int numCli = 0);
+        void wyslijProbkeRegulatora(double u, double w, double e, double p, double i, double d, int numCli = 0);
 
         signals:
         void newClientConnected(QString adr);
@@ -41,7 +41,7 @@
         void odebranoKonfigGen(double amplituda, double okres, int interwal, int typ, double skladowa, double wypelnienie);
         void odebranoAkcjeSymulacji(Akcja akcja, int parametr);
 
-        void odebranoProbke(double wartosc);
+        void odebranoProbkeOdObiektu(double y);
 
         //void newMsgFrom(QJsonObject json, int num);
     private slots:

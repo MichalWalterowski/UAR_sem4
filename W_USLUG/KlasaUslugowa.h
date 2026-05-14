@@ -64,12 +64,17 @@ public:
     void fromJson(const QJsonObject& obj);
 
     void ustawTrybSymulacji(int tryb);
-    void odbierzProbkeZSieci(double val);
-
+    //void odbierzProbkeZSieci(double val);
+    void odbierzZSieciOdObiektu(double y);
+    void odbierzZSieciOdRegulatora(double u, double w, double e, double p, double i, double d);
+signals:
 signals:
     void noweDane(double czas, double zadana, double wyjscie, double sterowanie, double uchyb);
 
-    void wyslijProbkeDoSieci(double val);
+    //void wyslijProbkeDoSieci(double val);
+    void nadajZRegulatora(double u, double w, double e, double p, double i, double d);
+    void nadajZObiektu(double y);
+
     void statusWyrabiania(bool ok);
 
     void nowyPing(int pingMs);

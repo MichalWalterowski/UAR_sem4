@@ -195,10 +195,10 @@
                 emit odebranoAkcjeSymulacji(akcja, parametr);
                 break;
             }
-            case TypRamki::ProbkaSymulacji: {
-                double wartosc;
-                in >> wartosc;
-                emit odebranoProbke(wartosc);
+            case TypRamki::ProbkaOdRegulatora: {
+                double u, w, e, p, i, d;
+                in >> u >> w >> e >> p >> i >> d;
+                emit odebranoProbkeOdRegulatora(u, w, e, p, i, d);
                 break;
             }
             default:
@@ -211,7 +211,7 @@
         }
     }
 
-    void MyTCPClient::wyslijProbke(double wartosc) {
+    void MyTCPClient::wyslijProbkeObiektu(double y) {
         if (!isConnected()) return;
 
         QByteArray ramka;
@@ -219,8 +219,8 @@
         out.setVersion(QDataStream::Qt_6_0);
 
         out << (quint32)0; // Miejsce na rozmiar ramki
-        out << (quint8)TypRamki::ProbkaSymulacji; // Typ ramki
-        out << wartosc; // Nasza próbka (u lub y)
+        out << (quint8)TypRamki::ProbkaOdObiektu; // Typ ramki
+        out << y; // Nasza próbka (u lub y)
 
         // Wpisanie właściwego rozmiaru na początek
         out.device()->seek(0);

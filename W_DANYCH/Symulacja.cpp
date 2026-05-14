@@ -174,10 +174,10 @@ double Symulacja::getModelUMIN() const { return m_prostyUAR.pobierzModel().getUM
 double Symulacja::getModelUMAX() const { return m_prostyUAR.pobierzModel().getUMAX(); }
 double Symulacja::getModelYMIN() const { return m_prostyUAR.pobierzModel().getYMIN(); }
 double Symulacja::getModelYMAX() const { return m_prostyUAR.pobierzModel().getYMAX(); }
-double Symulacja::getWartoscZadana() const { return m_wartoscZadana; }
+//double Symulacja::getWartoscZadana() const { return m_wartoscZadana; }
 double Symulacja::getWartoscWyjscie() const { return m_wartoscWyjscie; }
 double Symulacja::getSterowanie() const { return m_sterowanie; }
-double Symulacja::getUchyb() const { return m_uchyb; }
+//double Symulacja::getUchyb() const { return m_uchyb; }
 double Symulacja::getCzas() const { return m_czas; }
 bool Symulacja::czyDziala() const { return m_czyDziala; }
 int Symulacja::getInterwalMs() const { return m_generator.getInterwal(); }
@@ -199,7 +199,7 @@ void Symulacja::uruchom() {
     }
 }
 
-void Symulacja::odbierzZSieci(double wartosc) {
+void Symulacja::odbierzZSieciOdObiektu(double wartosc) {
     if (m_tryb == TrybSymulacji::SiecRegulator) {
         m_ostatnieOdebraneY = wartosc;
         m_czyPrzyszlaOdpowiedz = true; // Paczka dotarła!
@@ -209,14 +209,29 @@ void Symulacja::odbierzZSieci(double wartosc) {
             emit pingZaktualizowany(ping);
         }
     }
-    else if (m_tryb == TrybSymulacji::SiecObiekt) {
+    // else if (m_tryb == TrybSymulacji::SiecObiekt) {
+    //     if (!m_czyDziala) return;
+    //     m_sterowanie = wartosc; // Obiekt dostał u
+    //     m_wartoscWyjscie = m_prostyUAR.krokObiektu(m_sterowanie); // Liczy y
+    //     m_czas += m_generator.getInterwal() / 1000.0;
+
+    //     emit wyslijDoSieci(m_wartoscWyjscie); // Odsyła y
+    //     emit krokWykonany(); // Odświeża własne wykresy
+    // }
+}
+
+void Symulacja::odbierzZSieciOdRegulatora(double u, double w, double e, double p, double i, double d) {
+    if (m_tryb == TrybSymulacji::SiecObiekt) {
         if (!m_czyDziala) return;
-        m_sterowanie = wartosc; // Obiekt dostał u
-        m_wartoscWyjscie = m_prostyUAR.krokObiektu(m_sterowanie); // Liczy y
+        m_sterowanie = u;
+        // Zapisujemy resztę do buforów dla wykresów
+        m_odbW = w; m_odbE = e; m_odbP = p; m_odbI = i; m_odbD = d;
+
+        m_wartoscWyjscie = m_prostyUAR.krokObiektu(m_sterowanie);
         m_czas += m_generator.getInterwal() / 1000.0;
 
-        emit wyslijDoSieci(m_wartoscWyjscie); // Odsyła y
-        emit krokWykonany(); // Odświeża własne wykresy
+        emit wyslijZObiektuDoSieci(m_wartoscWyjscie);
+        emit krokWykonany();
     }
 }
 
@@ -242,7 +257,15 @@ void Symulacja::onTimerTimeout() {
         m_uchyb = m_prostyUAR.getOstatniUchyb();
         m_czas += m_generator.getInterwal() / 1000.0;
 
-        emit wyslijDoSieci(m_sterowanie); // Wysyła u w świat
+        emit wyslijZRegulatoraDoSieci(m_sterowanie, m_wartoscZadana, m_uchyb, getPidP(), getPidI(), getPidD()); // Wysyła u w świat
         emit krokWykonany();
     }
 }
+
+//
+double Symulacja::getWartoscZadana() const { return (m_tryb == TrybSymulacji::SiecObiekt) ? m_odbW : m_wartoscZadana; }
+double Symulacja::getUchyb() const { return (m_tryb == TrybSymulacji::SiecObiekt) ? m_odbE : m_uchyb; }
+
+double Symulacja::getPidP() const { return (m_tryb == TrybSymulacji::SiecObiekt) ? m_odbP : m_prostyUAR.pobierzRegulator().getLastP(); }
+double Symulacja::getPidI() const { return (m_tryb == TrybSymulacji::SiecObiekt) ? m_odbI : m_prostyUAR.pobierzRegulator().getLastI(); }
+double Symulacja::getPidD() const { return (m_tryb == TrybSymulacji::SiecObiekt) ? m_odbD : m_prostyUAR.pobierzRegulator().getLastD(); }

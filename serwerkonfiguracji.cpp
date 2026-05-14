@@ -243,10 +243,10 @@
                 emit odebranoAkcjeSymulacji(akcja, parametr);
                 break;
             }
-            case TypRamki::ProbkaSymulacji: {
-                double wartosc;
-                in >> wartosc;
-                emit odebranoProbke(wartosc);
+            case TypRamki::ProbkaOdObiektu: {
+                double y;
+                in >> y;
+                emit odebranoProbkeOdObiektu(y);
                 break;
             }
             default:
@@ -258,11 +258,11 @@
         }
     }
 
-    void MyTCPServer::wyslijProbke(double wartosc, int numCli) {
+    void MyTCPServer::wyslijProbkeRegulatora(double u, double w, double e, double p, double i, double d, int numCli) {
         // UWAGA: dla klienta usuń parametr numCli z ciała funkcji i użyj m_socket
         if (numCli >= m_clients.length() || numCli < 0) return;
         QByteArray ramka; QDataStream out(&ramka, QIODevice::WriteOnly); out.setVersion(QDataStream::Qt_6_0);
-        out << (quint32)0 << (quint8)TypRamki::ProbkaSymulacji << wartosc;
+        out << (quint32)0 << (quint8)TypRamki::ProbkaOdRegulatora << u << w << e << p << i << d;
         out.device()->seek(0); out << (quint32)(ramka.size() - sizeof(quint32));
         m_clients.at(numCli)->write(ramka);
     }

@@ -27,7 +27,7 @@
         void wyslijKonfigGen(double amplituda, double okres, int interwal, int typ, double skladowa, double wypelnienie);
         void wyslijAkcjeSymulacji(Akcja akcja, int parametr = 0);
 
-        void wyslijProbke(double wartosc);
+        void wyslijProbkeObiektu(double y);
     signals:
         void connected(QString adr, int port);
         void disconnected();
@@ -39,7 +39,7 @@
         void odebranoKonfigGen(double amplituda, double okres, int interwal, int typ, double skladowa, double wypelnienie);
         void odebranoAkcjeSymulacji(Akcja akcja, int parametr);
 
-        void odebranoProbke(double wartosc);
+        void odebranoProbkeOdRegulatora(double u, double w, double e, double p, double i, double d);
     private slots:
         void slot_connected();
         void slot_readyRead();

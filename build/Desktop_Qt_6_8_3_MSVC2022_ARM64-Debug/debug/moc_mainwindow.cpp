@@ -126,8 +126,15 @@ static constexpr auto qt_meta_stringdata_ZN10MainWindowE = QtMocHelpers::stringD
     "parametr",
     "aktualizujStatusRT",
     "ok",
-    "naWyslijProbke",
-    "val",
+    "naNadajZRegulatora",
+    "u",
+    "w",
+    "e",
+    "p",
+    "i",
+    "d",
+    "naNadajZObiektu",
+    "y",
     "aktualizujPing",
     "pingMs"
 );
@@ -141,7 +148,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN10MainWindowE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      31,   14, // methods
+      32,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -149,37 +156,38 @@ Q_CONSTINIT static const uint qt_meta_data_ZN10MainWindowE[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,  200,    2, 0x08,    1 /* Private */,
-       3,    0,  201,    2, 0x08,    2 /* Private */,
-       4,    0,  202,    2, 0x08,    3 /* Private */,
-       5,    5,  203,    2, 0x08,    4 /* Private */,
-      11,    0,  214,    2, 0x08,   10 /* Private */,
-      12,    0,  215,    2, 0x08,   11 /* Private */,
-      13,    0,  216,    2, 0x08,   12 /* Private */,
-      14,    0,  217,    2, 0x08,   13 /* Private */,
-      15,    9,  218,    2, 0x08,   14 /* Private */,
-      26,    0,  237,    2, 0x08,   24 /* Private */,
-      27,    0,  238,    2, 0x08,   25 /* Private */,
-      28,    0,  239,    2, 0x08,   26 /* Private */,
-      29,    0,  240,    2, 0x08,   27 /* Private */,
-      30,    0,  241,    2, 0x08,   28 /* Private */,
-      31,    0,  242,    2, 0x08,   29 /* Private */,
-      32,    0,  243,    2, 0x08,   30 /* Private */,
-      33,    0,  244,    2, 0x08,   31 /* Private */,
-      34,    0,  245,    2, 0x08,   32 /* Private */,
-      35,    0,  246,    2, 0x08,   33 /* Private */,
-      36,    0,  247,    2, 0x08,   34 /* Private */,
-      37,    0,  248,    2, 0x08,   35 /* Private */,
-      38,    1,  249,    2, 0x08,   36 /* Private */,
-      40,    1,  252,    2, 0x08,   38 /* Private */,
-      41,    0,  255,    2, 0x08,   40 /* Private */,
-      42,    4,  256,    2, 0x08,   41 /* Private */,
-      47,    9,  265,    2, 0x08,   46 /* Private */,
-      51,    6,  284,    2, 0x08,   56 /* Private */,
-      58,    2,  297,    2, 0x08,   63 /* Private */,
-      62,    1,  302,    2, 0x08,   66 /* Private */,
-      64,    1,  305,    2, 0x08,   68 /* Private */,
-      66,    1,  308,    2, 0x08,   70 /* Private */,
+       1,    0,  206,    2, 0x08,    1 /* Private */,
+       3,    0,  207,    2, 0x08,    2 /* Private */,
+       4,    0,  208,    2, 0x08,    3 /* Private */,
+       5,    5,  209,    2, 0x08,    4 /* Private */,
+      11,    0,  220,    2, 0x08,   10 /* Private */,
+      12,    0,  221,    2, 0x08,   11 /* Private */,
+      13,    0,  222,    2, 0x08,   12 /* Private */,
+      14,    0,  223,    2, 0x08,   13 /* Private */,
+      15,    9,  224,    2, 0x08,   14 /* Private */,
+      26,    0,  243,    2, 0x08,   24 /* Private */,
+      27,    0,  244,    2, 0x08,   25 /* Private */,
+      28,    0,  245,    2, 0x08,   26 /* Private */,
+      29,    0,  246,    2, 0x08,   27 /* Private */,
+      30,    0,  247,    2, 0x08,   28 /* Private */,
+      31,    0,  248,    2, 0x08,   29 /* Private */,
+      32,    0,  249,    2, 0x08,   30 /* Private */,
+      33,    0,  250,    2, 0x08,   31 /* Private */,
+      34,    0,  251,    2, 0x08,   32 /* Private */,
+      35,    0,  252,    2, 0x08,   33 /* Private */,
+      36,    0,  253,    2, 0x08,   34 /* Private */,
+      37,    0,  254,    2, 0x08,   35 /* Private */,
+      38,    1,  255,    2, 0x08,   36 /* Private */,
+      40,    1,  258,    2, 0x08,   38 /* Private */,
+      41,    0,  261,    2, 0x08,   40 /* Private */,
+      42,    4,  262,    2, 0x08,   41 /* Private */,
+      47,    9,  271,    2, 0x08,   46 /* Private */,
+      51,    6,  290,    2, 0x08,   56 /* Private */,
+      58,    2,  303,    2, 0x08,   63 /* Private */,
+      62,    1,  308,    2, 0x08,   66 /* Private */,
+      64,    6,  311,    2, 0x08,   68 /* Private */,
+      71,    1,  324,    2, 0x08,   75 /* Private */,
+      73,    1,  327,    2, 0x08,   77 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -211,8 +219,9 @@ Q_CONSTINIT static const uint qt_meta_data_ZN10MainWindowE[] = {
     QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Int, QMetaType::Int, QMetaType::Double, QMetaType::Double,   52,   53,   54,   55,   56,   57,
     QMetaType::Void, 0x80000000 | 59, QMetaType::Int,   60,   61,
     QMetaType::Void, QMetaType::Bool,   63,
-    QMetaType::Void, QMetaType::Double,   65,
-    QMetaType::Void, QMetaType::Int,   67,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,   65,   66,   67,   68,   69,   70,
+    QMetaType::Void, QMetaType::Double,   72,
+    QMetaType::Void, QMetaType::Int,   74,
 
        0        // eod
 };
@@ -322,7 +331,15 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'aktualizujStatusRT'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
-        // method 'naWyslijProbke'
+        // method 'naNadajZRegulatora'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        // method 'naNadajZObiektu'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         // method 'aktualizujPing'
@@ -366,8 +383,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 26: _t->naOdebranoKonfigGen((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6]))); break;
         case 27: _t->naOdebranoAkcjeSymulacji((*reinterpret_cast< std::add_pointer_t<Akcja>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
         case 28: _t->aktualizujStatusRT((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 29: _t->naWyslijProbke((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 30: _t->aktualizujPing((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 29: _t->naNadajZRegulatora((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6]))); break;
+        case 30: _t->naNadajZObiektu((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 31: _t->aktualizujPing((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     }
@@ -392,14 +410,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 31)
+        if (_id < 32)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 31;
+        _id -= 32;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 31)
+        if (_id < 32)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 31;
+        _id -= 32;
     }
     return _id;
 }

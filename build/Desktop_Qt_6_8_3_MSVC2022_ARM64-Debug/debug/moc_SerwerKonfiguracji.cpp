@@ -70,8 +70,8 @@ static constexpr auto qt_meta_stringdata_ZN11MyTCPServerE = QtMocHelpers::string
     "Akcja",
     "akcja",
     "parametr",
-    "odebranoProbke",
-    "wartosc",
+    "odebranoProbkeOdObiektu",
+    "y",
     "slot_new_client",
     "slot_client_disconnected",
     "slot_newMsg"
@@ -168,7 +168,7 @@ Q_CONSTINIT const QMetaObject MyTCPServer::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<Akcja, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        // method 'odebranoProbke'
+        // method 'odebranoProbkeOdObiektu'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         // method 'slot_new_client'
@@ -192,7 +192,7 @@ void MyTCPServer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 3: _t->odebranoKonfigARX((*reinterpret_cast< std::add_pointer_t<std::vector<double>>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<std::vector<double>>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[9]))); break;
         case 4: _t->odebranoKonfigGen((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6]))); break;
         case 5: _t->odebranoAkcjeSymulacji((*reinterpret_cast< std::add_pointer_t<Akcja>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 6: _t->odebranoProbke((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 6: _t->odebranoProbkeOdObiektu((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
         case 7: _t->slot_new_client(); break;
         case 8: _t->slot_client_disconnected(); break;
         case 9: _t->slot_newMsg(); break;
@@ -245,7 +245,7 @@ void MyTCPServer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         }
         {
             using _q_method_type = void (MyTCPServer::*)(double );
-            if (_q_method_type _q_method = &MyTCPServer::odebranoProbke; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            if (_q_method_type _q_method = &MyTCPServer::odebranoProbkeOdObiektu; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 6;
                 return;
             }
@@ -327,7 +327,7 @@ void MyTCPServer::odebranoAkcjeSymulacji(Akcja _t1, int _t2)
 }
 
 // SIGNAL 6
-void MyTCPServer::odebranoProbke(double _t1)
+void MyTCPServer::odebranoProbkeOdObiektu(double _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);

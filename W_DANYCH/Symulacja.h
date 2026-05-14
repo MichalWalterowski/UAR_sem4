@@ -36,6 +36,8 @@ private:
 
     qint64 m_czasWyslania = 0;
 
+    double m_odbW = 0.0, m_odbE = 0.0, m_odbP = 0.0, m_odbI = 0.0, m_odbD = 0.0;
+
 public:
     explicit Symulacja(QObject *parent = nullptr);
 
@@ -80,12 +82,19 @@ public:
     RegulatorPID pobierzRegulator() const;
 
     void ustawTryb(TrybSymulacji tryb);
-    void odbierzZSieci(double wartosc);
+    //void odbierzZSieci(double wartosc);
+    void odbierzZSieciOdRegulatora(double u, double w, double e, double p, double i, double d);
+    void odbierzZSieciOdObiektu(double y);
 
+    double getPidP() const;
+    double getPidI() const;
+    double getPidD() const;
 signals:
     void krokWykonany();
 
-    void wyslijDoSieci(double wartosc);
+    //void wyslijDoSieci(double wartosc);
+    void wyslijZRegulatoraDoSieci(double u, double w, double e, double p, double i, double d);
+    void wyslijZObiektuDoSieci(double y);
     void statusCzasuRzeczywistego(bool wyrabiaSie);
 
     void pingZaktualizowany(int pingMs);

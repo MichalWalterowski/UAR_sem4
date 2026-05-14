@@ -71,7 +71,9 @@ private slots:
     void naOdebranoAkcjeSymulacji(Akcja akcja, int parametr);
 
     void aktualizujStatusRT(bool ok);
-    void naWyslijProbke(double val);
+    //void naWyslijProbke(double val);
+    void naNadajZRegulatora(double u, double w, double e, double p, double i, double d);
+    void naNadajZObiektu(double y);
 
     void aktualizujPing(int pingMs);
 

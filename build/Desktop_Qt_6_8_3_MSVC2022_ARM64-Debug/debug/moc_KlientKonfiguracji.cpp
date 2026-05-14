@@ -70,8 +70,13 @@ static constexpr auto qt_meta_stringdata_ZN11MyTCPClientE = QtMocHelpers::string
     "Akcja",
     "akcja",
     "parametr",
-    "odebranoProbke",
-    "wartosc",
+    "odebranoProbkeOdRegulatora",
+    "u",
+    "w",
+    "e",
+    "p",
+    "i",
+    "d",
     "slot_connected",
     "slot_readyRead"
 );
@@ -99,11 +104,11 @@ Q_CONSTINIT static const uint qt_meta_data_ZN11MyTCPClientE[] = {
       11,    9,   83,    2, 0x06,   10 /* Public */,
       22,    6,  102,    2, 0x06,   20 /* Public */,
       29,    2,  115,    2, 0x06,   27 /* Public */,
-      33,    1,  120,    2, 0x06,   30 /* Public */,
+      33,    6,  120,    2, 0x06,   30 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      35,    0,  123,    2, 0x08,   32 /* Private */,
-      36,    0,  124,    2, 0x08,   33 /* Private */,
+      40,    0,  133,    2, 0x08,   37 /* Private */,
+      41,    0,  134,    2, 0x08,   38 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::Int,    3,    4,
@@ -112,7 +117,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN11MyTCPClientE[] = {
     QMetaType::Void, 0x80000000 | 12, 0x80000000 | 12, QMetaType::Int, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Bool,   13,   14,   15,   16,   17,   18,   19,   20,   21,
     QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Int, QMetaType::Int, QMetaType::Double, QMetaType::Double,   23,   24,   25,   26,   27,   28,
     QMetaType::Void, 0x80000000 | 30, QMetaType::Int,   31,   32,
-    QMetaType::Void, QMetaType::Double,   34,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,   34,   35,   36,   37,   38,   39,
 
  // slots: parameters
     QMetaType::Void,
@@ -165,8 +170,13 @@ Q_CONSTINIT const QMetaObject MyTCPClient::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<Akcja, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        // method 'odebranoProbke'
+        // method 'odebranoProbkeOdRegulatora'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         // method 'slot_connected'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
@@ -187,7 +197,7 @@ void MyTCPClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 3: _t->odebranoKonfigARX((*reinterpret_cast< std::add_pointer_t<std::vector<double>>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<std::vector<double>>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[9]))); break;
         case 4: _t->odebranoKonfigGen((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6]))); break;
         case 5: _t->odebranoAkcjeSymulacji((*reinterpret_cast< std::add_pointer_t<Akcja>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 6: _t->odebranoProbke((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 6: _t->odebranoProbkeOdRegulatora((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6]))); break;
         case 7: _t->slot_connected(); break;
         case 8: _t->slot_readyRead(); break;
         default: ;
@@ -238,8 +248,8 @@ void MyTCPClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
             }
         }
         {
-            using _q_method_type = void (MyTCPClient::*)(double );
-            if (_q_method_type _q_method = &MyTCPClient::odebranoProbke; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            using _q_method_type = void (MyTCPClient::*)(double , double , double , double , double , double );
+            if (_q_method_type _q_method = &MyTCPClient::odebranoProbkeOdRegulatora; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 6;
                 return;
             }
@@ -320,9 +330,9 @@ void MyTCPClient::odebranoAkcjeSymulacji(Akcja _t1, int _t2)
 }
 
 // SIGNAL 6
-void MyTCPClient::odebranoProbke(double _t1)
+void MyTCPClient::odebranoProbkeOdRegulatora(double _t1, double _t2, double _t3, double _t4, double _t5, double _t6)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
 QT_WARNING_POP

@@ -36,8 +36,10 @@ MainWindow::MainWindow(QWidget *parent, KlasaUslugowa *usluga)
     // I podepnij sygnał z usługi:
     connect(m_usluga, &KlasaUslugowa::nowyPing, this, &MainWindow::aktualizujPing);
 
-    connect(m_usluga, &KlasaUslugowa::wyslijProbkeDoSieci, this, &MainWindow::naWyslijProbke);
+    //connect(m_usluga, &KlasaUslugowa::wyslijProbkeDoSieci, this, &MainWindow::naWyslijProbke);
     connect(m_usluga, &KlasaUslugowa::statusWyrabiania, this, &MainWindow::aktualizujStatusRT);
+    connect(m_usluga, &KlasaUslugowa::nadajZRegulatora, this, &MainWindow::naNadajZRegulatora);
+    connect(m_usluga, &KlasaUslugowa::nadajZObiektu, this, &MainWindow::naNadajZObiektu);
 
     // --- PID  ---
     ui->spinPidKp->setRange(0.0, 100.0); ui->spinPidKp->setSingleStep(0.1);
@@ -510,7 +512,8 @@ void MainWindow::on_pushPolaczSiec_clicked()
             connect(m_serwer, &MyTCPServer::odebranoKonfigGen, this, &MainWindow::naOdebranoKonfigGen);
             connect(m_serwer, &MyTCPServer::odebranoKonfigARX, this, &MainWindow::naOdebranoKonfigARX);
             connect(m_serwer, &MyTCPServer::odebranoAkcjeSymulacji, this, &MainWindow::naOdebranoAkcjeSymulacji);
-            connect(m_serwer, &MyTCPServer::odebranoProbke, m_usluga, &KlasaUslugowa::odbierzProbkeZSieci);
+            //connect(m_serwer, &MyTCPServer::odebranoProbke, m_usluga, &KlasaUslugowa::odbierzProbkeZSieci);
+            connect(m_serwer, &MyTCPServer::odebranoProbkeOdObiektu, m_usluga, &KlasaUslugowa::odbierzZSieciOdObiektu);
 
             connect(m_serwer, &MyTCPServer::newClientConnected, this, [this](QString adr) {
                 QString msg = "Połączono z klientem. IP: " + adr;
@@ -535,7 +538,8 @@ void MainWindow::on_pushPolaczSiec_clicked()
             connect(m_klient, &MyTCPClient::odebranoKonfigGen, this, &MainWindow::naOdebranoKonfigGen);
             connect(m_klient, &MyTCPClient::odebranoKonfigARX, this, &MainWindow::naOdebranoKonfigARX);
             connect(m_klient, &MyTCPClient::odebranoAkcjeSymulacji, this, &MainWindow::naOdebranoAkcjeSymulacji);
-            connect(m_klient, &MyTCPClient::odebranoProbke, m_usluga, &KlasaUslugowa::odbierzProbkeZSieci);
+            //connect(m_klient, &MyTCPClient::odebranoProbke, m_usluga, &KlasaUslugowa::odbierzProbkeZSieci);
+            connect(m_klient, &MyTCPClient::odebranoProbkeOdRegulatora, m_usluga, &KlasaUslugowa::odbierzZSieciOdRegulatora);
 
             connect(m_klient, &MyTCPClient::connected, this, [this](QString adr, int port) {
                 QString msg = QString("Połączono z serwerem. Adres: %1:%2").arg(adr).arg(port);
@@ -644,11 +648,22 @@ void MainWindow::aktualizujStatusRT(bool ok) {
     }
 }
 
-void MainWindow::naWyslijProbke(double val) {
+// void MainWindow::naWyslijProbke(double val) {
+//     if (m_obecnyTryb == TrybPracy::SieciowyRegulator && m_serwer) {
+//         m_serwer->wyslijProbke(val);
+//     } else if (m_obecnyTryb == TrybPracy::SieciowyObiekt && m_klient) {
+//         m_klient->wyslijProbke(val);
+//     }
+// }
+
+void MainWindow::naNadajZRegulatora(double u, double w, double e, double p, double i, double d) {
     if (m_obecnyTryb == TrybPracy::SieciowyRegulator && m_serwer) {
-        m_serwer->wyslijProbke(val);
-    } else if (m_obecnyTryb == TrybPracy::SieciowyObiekt && m_klient) {
-        m_klient->wyslijProbke(val);
+        m_serwer->wyslijProbkeRegulatora(u, w, e, p, i, d);
+    }
+}
+void MainWindow::naNadajZObiektu(double y) {
+    if (m_obecnyTryb == TrybPracy::SieciowyObiekt && m_klient) {
+        m_klient->wyslijProbkeObiektu(y);
     }
 }
 

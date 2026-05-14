@@ -40,8 +40,15 @@ static constexpr auto qt_meta_stringdata_ZN9SymulacjaE = QtMocHelpers::stringDat
     "Symulacja",
     "krokWykonany",
     "",
-    "wyslijDoSieci",
-    "wartosc",
+    "wyslijZRegulatoraDoSieci",
+    "u",
+    "w",
+    "e",
+    "p",
+    "i",
+    "d",
+    "wyslijZObiektuDoSieci",
+    "y",
     "statusCzasuRzeczywistego",
     "wyrabiaSie",
     "pingZaktualizowany",
@@ -58,27 +65,29 @@ Q_CONSTINIT static const uint qt_meta_data_ZN9SymulacjaE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   44,    2, 0x06,    1 /* Public */,
-       3,    1,   45,    2, 0x06,    2 /* Public */,
-       5,    1,   48,    2, 0x06,    4 /* Public */,
-       7,    1,   51,    2, 0x06,    6 /* Public */,
+       1,    0,   50,    2, 0x06,    1 /* Public */,
+       3,    6,   51,    2, 0x06,    2 /* Public */,
+      10,    1,   64,    2, 0x06,    9 /* Public */,
+      12,    1,   67,    2, 0x06,   11 /* Public */,
+      14,    1,   70,    2, 0x06,   13 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       9,    0,   54,    2, 0x08,    8 /* Private */,
+      16,    0,   73,    2, 0x08,   15 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Double,    4,
-    QMetaType::Void, QMetaType::Bool,    6,
-    QMetaType::Void, QMetaType::Int,    8,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    4,    5,    6,    7,    8,    9,
+    QMetaType::Void, QMetaType::Double,   11,
+    QMetaType::Void, QMetaType::Bool,   13,
+    QMetaType::Void, QMetaType::Int,   15,
 
  // slots: parameters
     QMetaType::Void,
@@ -97,7 +106,15 @@ Q_CONSTINIT const QMetaObject Symulacja::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<Symulacja, std::true_type>,
         // method 'krokWykonany'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'wyslijDoSieci'
+        // method 'wyslijZRegulatoraDoSieci'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        // method 'wyslijZObiektuDoSieci'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         // method 'statusCzasuRzeczywistego'
@@ -118,10 +135,11 @@ void Symulacja::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->krokWykonany(); break;
-        case 1: _t->wyslijDoSieci((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 2: _t->statusCzasuRzeczywistego((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 3: _t->pingZaktualizowany((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 4: _t->onTimerTimeout(); break;
+        case 1: _t->wyslijZRegulatoraDoSieci((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6]))); break;
+        case 2: _t->wyslijZObiektuDoSieci((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 3: _t->statusCzasuRzeczywistego((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 4: _t->pingZaktualizowany((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 5: _t->onTimerTimeout(); break;
         default: ;
         }
     }
@@ -135,23 +153,30 @@ void Symulacja::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
             }
         }
         {
-            using _q_method_type = void (Symulacja::*)(double );
-            if (_q_method_type _q_method = &Symulacja::wyslijDoSieci; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            using _q_method_type = void (Symulacja::*)(double , double , double , double , double , double );
+            if (_q_method_type _q_method = &Symulacja::wyslijZRegulatoraDoSieci; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 1;
+                return;
+            }
+        }
+        {
+            using _q_method_type = void (Symulacja::*)(double );
+            if (_q_method_type _q_method = &Symulacja::wyslijZObiektuDoSieci; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+                *result = 2;
                 return;
             }
         }
         {
             using _q_method_type = void (Symulacja::*)(bool );
             if (_q_method_type _q_method = &Symulacja::statusCzasuRzeczywistego; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
-                *result = 2;
+                *result = 3;
                 return;
             }
         }
         {
             using _q_method_type = void (Symulacja::*)(int );
             if (_q_method_type _q_method = &Symulacja::pingZaktualizowany; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
-                *result = 3;
+                *result = 4;
                 return;
             }
         }
@@ -177,14 +202,14 @@ int Symulacja::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 6)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }
@@ -196,23 +221,30 @@ void Symulacja::krokWykonany()
 }
 
 // SIGNAL 1
-void Symulacja::wyslijDoSieci(double _t1)
+void Symulacja::wyslijZRegulatoraDoSieci(double _t1, double _t2, double _t3, double _t4, double _t5, double _t6)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void Symulacja::statusCzasuRzeczywistego(bool _t1)
+void Symulacja::wyslijZObiektuDoSieci(double _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
-void Symulacja::pingZaktualizowany(int _t1)
+void Symulacja::statusCzasuRzeczywistego(bool _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+
+// SIGNAL 4
+void Symulacja::pingZaktualizowany(int _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 QT_WARNING_POP
