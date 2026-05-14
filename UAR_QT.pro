@@ -2,9 +2,16 @@ QT       += core gui widgets charts
 
 CONFIG   += c++17
 
+CONFIG += console
+
+QT += core network
+
 INCLUDEPATH += W_DANYCH W_USLUG W_PREZENTACJI W_TESTY
 
 SOURCES += \
+    DialogPolaczenie.cpp \
+    KlientKonfiguracji.cpp \
+    SerwerKonfiguracji.cpp \
     W_DANYCH/GeneratorWartosciZadanej.cpp \
     W_DANYCH/ModelARX.cpp \
     W_DANYCH/RegulatorPID.cpp \
@@ -18,6 +25,10 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    DialogPolaczenie.h \
+    KlientKonfiguracji.h \
+    ProtokolSieciowy.h \
+    SerwerKonfiguracji.h \
     W_DANYCH/GeneratorWartosciZadanej.h \
     W_DANYCH/ModelARX.h \
     W_DANYCH/RegulatorPID.h \
@@ -30,6 +41,7 @@ HEADERS += \
     W_DANYCH/Symulacja.h
 
 FORMS += \
+    DialogPolaczenie.ui \
     W_PREZENTACJI/ParametryARX.ui \
     W_PREZENTACJI/mainwindow.ui
 
