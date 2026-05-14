@@ -43,6 +43,8 @@ public:
     void setOdchylenieStandardoweSzumu(double i_oss);
     void setOgraniczeniaSterowania(double i_umin, double i_umax);
     void setOgraniczeniaWyjscia(double i_ymin, double i_ymax);
+    void setOgraniczeniaWlaczone(bool wlacz) { m_ograniczenia = wlacz; }
+    bool czyOgraniczeniaWlaczone() const { return m_ograniczenia; }
     void setOgraniczenia(bool i_ograniczenia);
 
     std::vector<double> getA() const;

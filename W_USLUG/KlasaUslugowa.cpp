@@ -37,9 +37,10 @@ void KlasaUslugowa::ustawPID(double k, double ti, double td, int metoda) {
 
 void KlasaUslugowa::ustawModel(const std::vector<double>& A, const std::vector<double>& B,
                                int opoznienie, double szum,
-                               double umin, double umax, double ymin, double ymax) {
+                               double umin, double umax, double ymin, double ymax, bool ograniczenia) {
     m_symulacja.konfigurujModel(A, B, opoznienie, szum);
     m_symulacja.ustawOgraniczenia(umin, umax, ymin, ymax);
+    m_symulacja.setOgraniczeniaWlaczone(ograniczenia);
 }
 
 // ETTERY DANYCH CHWILOWYCH
@@ -69,7 +70,7 @@ int KlasaUslugowa::getPidMetodaCalkowania() const { return static_cast<int>(m_sy
 // POBIERANIE MODELU
 void KlasaUslugowa::pobierzModel(std::vector<double>& A, std::vector<double>& B,
                                  int& opoznienie, double& szum,
-                                 double& uMin, double& uMax, double& yMin, double& yMax) const
+                                 double& uMin, double& uMax, double& yMin, double& yMax, bool& ograniczenia) const
 {
     ModelARX m = m_symulacja.pobierzModel();
     A = m.getA();
@@ -80,6 +81,7 @@ void KlasaUslugowa::pobierzModel(std::vector<double>& A, std::vector<double>& B,
     uMax = m.getUMAX();
     yMin = m.getYMIN();
     yMax = m.getYMAX();
+    ograniczenia = m.czyOgraniczeniaWlaczone();
 }
 
 // JSON

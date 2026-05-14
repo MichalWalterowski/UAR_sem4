@@ -32,7 +32,7 @@ public:
 
     void ustawModel(const std::vector<double>& A, const std::vector<double>& B,
                     int opoznienie, double szum,
-                    double u_min, double u_max, double y_min, double y_max);
+                    double u_min, double u_max, double y_min, double y_max, bool ograniczenia);
 
     double getCzas() const;
     double getWartoscZadana() const;
@@ -58,7 +58,7 @@ public:
 
     void pobierzModel(std::vector<double>& A, std::vector<double>& B,
                       int& opoznienie, double& szum,
-                      double& uMin, double& uMax, double& yMin, double& yMax) const;
+                      double& uMin, double& uMax, double& yMin, double& yMax, bool& ograniczenia) const;
 
     QJsonObject toJson() const;
     void fromJson(const QJsonObject& obj);

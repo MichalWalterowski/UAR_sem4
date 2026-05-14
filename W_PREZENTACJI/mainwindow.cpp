@@ -310,15 +310,16 @@ void MainWindow::on_pushConfigARX_clicked() {
     std::vector<double> A, B;
     int opoznienie;
     double szum, umin, umax, ymin, ymax;
+    bool ograniczenia;
 
-    m_usluga->pobierzModel(A, B, opoznienie, szum, umin, umax, ymin, ymax);
-    okno.ustawDane(A, B, opoznienie, szum, umin, umax, ymin, ymax);
+    m_usluga->pobierzModel(A, B, opoznienie, szum, umin, umax, ymin, ymax, ograniczenia);
+    okno.ustawDane(A, B, opoznienie, szum, umin, umax, ymin, ymax, ograniczenia);
     connect(&okno, &ParametryARX::zglosNoweParametry, this, &MainWindow::odbierzParametryARX);
     okno.exec();
 }
 
-void MainWindow::odbierzParametryARX(std::vector<double> a, std::vector<double> b, int k, double szum, double umin, double umax, double ymin, double ymax) {
-    m_usluga->ustawModel(a, b, k, szum, umin, umax, ymin, ymax);
+void MainWindow::odbierzParametryARX(std::vector<double> a, std::vector<double> b, int k, double szum, double umin, double umax, double ymin, double ymax, bool ograniczenia) {
+    m_usluga->ustawModel(a, b, k, szum, umin, umax, ymin, ymax, ograniczenia);
 
     // WYSYŁANIE PRZEZ SIEĆ (Tylko obiekt to może edytować, więc tylko on wysyła)
     if (m_obecnyTryb == TrybPracy::SieciowyObiekt && m_klient && m_klient->isConnected()) {

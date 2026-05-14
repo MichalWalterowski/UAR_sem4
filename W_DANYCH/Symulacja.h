@@ -48,6 +48,8 @@ public:
     void wykonajKrok();
     void resetUAR();
 
+    void setOgraniczeniaWlaczone(bool wlacz);
+
     std::vector<double> getModelA() const;
     std::vector<double> getModelB() const;
     int getModelOpoznienie() const;
