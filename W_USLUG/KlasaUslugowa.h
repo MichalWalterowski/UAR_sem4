@@ -63,8 +63,16 @@ public:
     QJsonObject toJson() const;
     void fromJson(const QJsonObject& obj);
 
+    void ustawTrybSymulacji(int tryb);
+    void odbierzProbkeZSieci(double val);
+
 signals:
     void noweDane(double czas, double zadana, double wyjscie, double sterowanie, double uchyb);
+
+    void wyslijProbkeDoSieci(double val);
+    void statusWyrabiania(bool ok);
+
+    void nowyPing(int pingMs);
 };
 
 #endif // KLASAUSLUGOWA_H

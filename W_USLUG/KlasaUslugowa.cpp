@@ -16,6 +16,9 @@ KlasaUslugowa::KlasaUslugowa(QObject *parent)
             m_symulacja.getUchyb()
             );
     });
+    connect(&m_symulacja, &Symulacja::wyslijDoSieci, this, &KlasaUslugowa::wyslijProbkeDoSieci);
+    connect(&m_symulacja, &Symulacja::statusCzasuRzeczywistego, this, &KlasaUslugowa::statusWyrabiania);
+    connect(&m_symulacja, &Symulacja::pingZaktualizowany, this, &KlasaUslugowa::nowyPing);
 }
 
 void KlasaUslugowa::start() { m_symulacja.uruchom(); }
@@ -94,3 +97,9 @@ void KlasaUslugowa::fromJson(const QJsonObject& root) {
     reset();
 }
 
+void KlasaUslugowa::ustawTrybSymulacji(int tryb) {
+    m_symulacja.ustawTryb(static_cast<TrybSymulacji>(tryb));
+}
+void KlasaUslugowa::odbierzProbkeZSieci(double val) {
+    m_symulacja.odbierzZSieci(val);
+}

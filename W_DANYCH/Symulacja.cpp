@@ -95,13 +95,13 @@ void Symulacja::fromJson(const QJsonObject& root)
             );
     }
 }
-
+/*
 void Symulacja::onTimerTimeout() {
     wykonajKrok();
     emit krokWykonany();
 }
-
-void Symulacja::uruchom() { m_czyDziala = true; m_timer->start(); }
+*/
+//void Symulacja::uruchom() { m_czyDziala = true; m_timer->start(); }
 void Symulacja::zatrzymaj() { m_czyDziala = false; m_timer->stop(); }
 
 void Symulacja::setInterwal(int ms) {
@@ -184,3 +184,65 @@ int Symulacja::getInterwalMs() const { return m_generator.getInterwal(); }
 GeneratorWartosciZadanej Symulacja::pobierzGenerator() const { return m_generator; }
 ModelARX Symulacja::pobierzModel() const { return m_prostyUAR.pobierzModel(); }
 RegulatorPID Symulacja::pobierzRegulator() const { return m_prostyUAR.pobierzRegulator(); }
+
+void Symulacja::ustawTryb(TrybSymulacji tryb) {
+    m_tryb = tryb;
+    m_czyPrzyszlaOdpowiedz = true;
+    m_ostatnieOdebraneY = 0.0;
+}
+
+void Symulacja::uruchom() {
+    m_czyDziala = true;
+    // Obiekt nie odpala własnego zegara - czeka biernie na paczki!
+    if (m_tryb != TrybSymulacji::SiecObiekt) {
+        m_timer->start();
+    }
+}
+
+void Symulacja::odbierzZSieci(double wartosc) {
+    if (m_tryb == TrybSymulacji::SiecRegulator) {
+        m_ostatnieOdebraneY = wartosc;
+        m_czyPrzyszlaOdpowiedz = true; // Paczka dotarła!
+
+        if (m_czasWyslania > 0) {
+            int ping = static_cast<int>(QDateTime::currentMSecsSinceEpoch() - m_czasWyslania);
+            emit pingZaktualizowany(ping);
+        }
+    }
+    else if (m_tryb == TrybSymulacji::SiecObiekt) {
+        if (!m_czyDziala) return;
+        m_sterowanie = wartosc; // Obiekt dostał u
+        m_wartoscWyjscie = m_prostyUAR.krokObiektu(m_sterowanie); // Liczy y
+        m_czas += m_generator.getInterwal() / 1000.0;
+
+        emit wyslijDoSieci(m_wartoscWyjscie); // Odsyła y
+        emit krokWykonany(); // Odświeża własne wykresy
+    }
+}
+
+void Symulacja::onTimerTimeout() {
+    if (m_tryb == TrybSymulacji::Lokalny) {
+        wykonajKrok();
+        emit statusCzasuRzeczywistego(true);
+        emit krokWykonany();
+    }
+    else if (m_tryb == TrybSymulacji::SiecRegulator) {
+        // Test czy symulacja "się wyrabia"
+        emit statusCzasuRzeczywistego(m_czyPrzyszlaOdpowiedz);
+        m_czyPrzyszlaOdpowiedz = false; // Reset na poczet kolejnej próbki
+
+        m_czasWyslania = QDateTime::currentMSecsSinceEpoch();
+
+        m_wartoscZadana = m_generator.generuj();
+        m_generator.krokSymulacji();
+
+        // Liczy nowe u na bazie ostatnio znanego y
+        m_sterowanie = m_prostyUAR.krokRegulatora(m_wartoscZadana, m_ostatnieOdebraneY);
+        m_wartoscWyjscie = m_ostatnieOdebraneY; // Do poprawnego rysowania na wykresie regulatora
+        m_uchyb = m_prostyUAR.getOstatniUchyb();
+        m_czas += m_generator.getInterwal() / 1000.0;
+
+        emit wyslijDoSieci(m_sterowanie); // Wysyła u w świat
+        emit krokWykonany();
+    }
+}

@@ -34,6 +34,9 @@ public:
     double getOstatnieWyjscie() const;
 
     void setOgraniczeniaWlaczone(bool wlacz) { m_model.setOgraniczeniaWlaczone(wlacz); }
+
+    double krokRegulatora(double wartoscZadana, double obecneWyjscie);
+    double krokObiektu(double sterowanie);
 };
 
 #endif // PROSTYUAR_H
