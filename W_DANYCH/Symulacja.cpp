@@ -162,6 +162,10 @@ void Symulacja::konfigurujMetodePID(int indeksMetody) {
 }
 void Symulacja::resetUAR() { m_prostyUAR.reset(); }
 
+void Symulacja::setOgraniczeniaWlaczone(bool wlacz) {
+    m_prostyUAR.setOgraniczeniaWlaczone(wlacz);
+}
+
 std::vector<double> Symulacja::getModelA() const { return m_prostyUAR.pobierzModel().getA(); }
 std::vector<double> Symulacja::getModelB() const { return m_prostyUAR.pobierzModel().getB(); }
 int Symulacja::getModelOpoznienie() const { return m_prostyUAR.pobierzModel().getOpoznienieTransportowe(); }

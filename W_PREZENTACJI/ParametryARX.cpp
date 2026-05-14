@@ -27,7 +27,7 @@ ParametryARX::~ParametryARX()
 
 void ParametryARX::ustawDane(const std::vector<double>& a, const std::vector<double>& b,
                              int opoznienie, double szum,
-                             double umin, double umax, double ymin, double ymax)
+                             double umin, double umax, double ymin, double ymax, bool ograniczenia)
 {
     QString strA = vectorToString(a);
     QString strB = vectorToString(b);
@@ -58,7 +58,7 @@ void ParametryARX::ustawDane(const std::vector<double>& a, const std::vector<dou
         ui->labelCurrentSummary->setText(info);
     }
 
-    //ui->checkOgraniczenia->
+    ui->checkOgraniczenia->setChecked(ograniczenia);
 }
 
 void ParametryARX::on_pushZapisz_clicked()
@@ -110,7 +110,8 @@ void ParametryARX::on_pushZapisz_clicked()
         return;
     }
 
-    emit zglosNoweParametry(tempA, tempB, opoznienie, szum, uMin, uMax, yMin, yMax);
+    bool czyOgraniczenia=ui->checkOgraniczenia->isChecked();
+    emit zglosNoweParametry(tempA, tempB, opoznienie, szum, uMin, uMax, yMin, yMax, czyOgraniczenia);
     this->accept();
 }
 

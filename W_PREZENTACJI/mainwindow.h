@@ -34,7 +34,7 @@ private slots:
     void on_spinInterwal_editingFinished();
 
     void on_pushConfigARX_clicked();
-    void odbierzParametryARX(std::vector<double> a, std::vector<double> b, int k, double szum, double umin, double umax, double ymin, double ymax);
+    void odbierzParametryARX(std::vector<double> a, std::vector<double> b, int k, double szum, double umin, double umax, double ymin, double ymax, bool ograniczenia);
     void on_pushSaveConfig_clicked();
     void on_pushLoadConfig_clicked();
     void on_pushResetPID_clicked();

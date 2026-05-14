@@ -32,6 +32,8 @@ public:
     double getOstatniUchyb() const;
     double getOstatnieSterowanie() const;
     double getOstatnieWyjscie() const;
+
+    void setOgraniczeniaWlaczone(bool wlacz) { m_model.setOgraniczeniaWlaczone(wlacz); }
 };
 
 #endif // PROSTYUAR_H

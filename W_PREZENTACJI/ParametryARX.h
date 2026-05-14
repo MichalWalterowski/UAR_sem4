@@ -16,12 +16,12 @@ public:
 
     void ustawDane(const std::vector<double>& a, const std::vector<double>& b,
                    int opoznienie, double szum,
-                   double umin, double umax, double ymin, double ymax);
+                   double umin, double umax, double ymin, double ymax, bool ograniczenia);
 
 signals:
     void zglosNoweParametry(std::vector<double> a, std::vector<double> b,
                             int opoznienie, double szum,
-                            double umin, double umax, double ymin, double ymax);
+                            double umin, double umax, double ymin, double ymax, bool ograniczenia);
 
 private slots:
     void on_pushZapisz_clicked();
