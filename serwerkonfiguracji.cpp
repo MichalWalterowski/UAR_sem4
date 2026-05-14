@@ -50,7 +50,8 @@
         m_clients.at(numCli)->write(ramka);
     }
 
-    void MyTCPServer::wyslijKonfigARX(const std::vector<double>& A, const std::vector<double>& B, int opoznienie, double szum, int numCli) {
+    void MyTCPServer::wyslijKonfigARX(const std::vector<double>& A, const std::vector<double>& B, int opoznienie, double szum,
+                                      double umin, double umax, double ymin, double ymax, bool ograniczenia, int numCli) {
         if (numCli >= m_clients.length() || numCli < 0) return;
         QByteArray ramka;
         QDataStream out(&ramka, QIODevice::WriteOnly);
@@ -66,6 +67,8 @@
         for(double v : B) out << v;
 
         out << opoznienie << szum;
+
+        out << umin << umax << ymin << ymax << ograniczenia;
 
         out.device()->seek(0);
         out << (quint32)(ramka.size() - sizeof(quint32));
@@ -205,9 +208,9 @@
             case TypRamki::KonfigARX: {
                 std::vector<double> A, B;
                 quint32 sizeA, sizeB;
-                double val;
+                double val, umin, umax, ymin, ymax, szum;
                 int opoznienie;
-                double szum;
+                bool ograniczenia;
 
                 in >> sizeA;
                 for(quint32 i=0; i<sizeA; ++i) { in >> val; A.push_back(val); }
@@ -216,7 +219,10 @@
                 for(quint32 i=0; i<sizeB; ++i) { in >> val; B.push_back(val); }
 
                 in >> opoznienie >> szum;
-                emit odebranoKonfigARX(A, B, opoznienie, szum);
+
+                in >> umin >> umax >> ymin >> ymax >> ograniczenia;
+
+                emit odebranoKonfigARX(A, B, opoznienie, szum, umin, umax, ymin, ymax, ograniczenia);
                 break;
             }
             case TypRamki::KonfigGeneratora: {
@@ -237,6 +243,12 @@
                 emit odebranoAkcjeSymulacji(akcja, parametr);
                 break;
             }
+            case TypRamki::ProbkaOdObiektu: {
+                double y;
+                in >> y;
+                emit odebranoProbkeOdObiektu(y);
+                break;
+            }
             default:
                 break;
             }
@@ -246,3 +258,11 @@
         }
     }
 
+    void MyTCPServer::wyslijProbkeRegulatora(double u, double w, double e, double p, double i, double d, int numCli) {
+        // UWAGA: dla klienta usuń parametr numCli z ciała funkcji i użyj m_socket
+        if (numCli >= m_clients.length() || numCli < 0) return;
+        QByteArray ramka; QDataStream out(&ramka, QIODevice::WriteOnly); out.setVersion(QDataStream::Qt_6_0);
+        out << (quint32)0 << (quint8)TypRamki::ProbkaOdRegulatora << u << w << e << p << i << d;
+        out.device()->seek(0); out << (quint32)(ramka.size() - sizeof(quint32));
+        m_clients.at(numCli)->write(ramka);
+    }

@@ -40,12 +40,12 @@ void ParametryARX::ustawDane(const std::vector<double>& a, const std::vector<dou
         ui->spinZaklocenie->setValue(szum);
     }
 
-    //
+    /*
     if (umin <= std::numeric_limits<double>::min() && ymin <= std::numeric_limits<double>::min() && umax >= std::numeric_limits<double>::max() && ymax <= std::numeric_limits<double>::max())   {
         ui->checkOgraniczenia->setChecked(false);
     }
     else ui->checkOgraniczenia->setChecked(true);
-    //
+    */
 
     ui->spinMinU->setValue(umin);
     ui->spinMaxU->setValue(umax);
@@ -79,17 +79,17 @@ void ParametryARX::on_pushZapisz_clicked()
     // wartości min < wartości max
 
 
-    if (ui->checkOgraniczenia->isChecked()) {
+    //if (ui->checkOgraniczenia->isChecked()) {
         uMin = ui->spinMinU->value();
         uMax = ui->spinMaxU->value();
         yMin = ui->spinMinY->value();
         yMax = ui->spinMaxY->value();
-    } else {
+    /*} else {
         // Symulacja braku ograniczeń (ogromne limity)
         uMin = std::numeric_limits<double>::min(); uMax = std::numeric_limits<double>::max();
         yMin = std::numeric_limits<double>::min(); yMax = std::numeric_limits<double>::max();
     }
-
+    */
     if (uMin >= uMax) {
         QMessageBox::warning(this, "Błąd", "Nasycenie wejścia: Min U musi być mniejsze od Max U!");
         return;

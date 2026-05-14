@@ -9,7 +9,7 @@ ProstyUAR::ProstyUAR(ModelARX wzorzecModelu, RegulatorPID wzorzecRegulatora)
 {
     reset();
 }
-
+/*
 double ProstyUAR::symuluj(double wartoscZadana)
 {
     double uchyb = wartoscZadana - m_ostatnieWyjscie;
@@ -39,7 +39,7 @@ double ProstyUAR::symuluj(double wartoscZadana)
 
     return noweWyjscie;
 }
-
+*/
 void ProstyUAR::reset()
 {
     m_model.resetuj();
@@ -82,3 +82,29 @@ RegulatorPID ProstyUAR::pobierzRegulator() const
 double ProstyUAR::getOstatniUchyb() const { return m_ostatniUchyb; }
 double ProstyUAR::getOstatnieSterowanie() const { return m_ostatnieSterowanie; }
 double ProstyUAR::getOstatnieWyjscie() const { return m_ostatnieWyjscie; }
+
+double ProstyUAR::krokRegulatora(double wartoscZadana, double obecneWyjscie) {
+    double uchyb = wartoscZadana - obecneWyjscie;
+    double sterowanie = m_regulator.symuluj(uchyb);
+
+    if (sterowanie == 0.0) {
+        m_regulator.resetuj();
+        m_ostatniUchyb = 0.0;
+    } else {
+        m_ostatniUchyb = uchyb;
+    }
+    m_ostatnieSterowanie = sterowanie;
+    return sterowanie;
+}
+
+double ProstyUAR::krokObiektu(double sterowanie) {
+    double noweWyjscie = m_model.symuluj(sterowanie);
+    m_ostatnieWyjscie = noweWyjscie;
+    return noweWyjscie;
+}
+
+// Zmieniamy starą metodę, aby po prostu wywoływała nowe:
+double ProstyUAR::symuluj(double wartoscZadana) {
+    double u = krokRegulatora(wartoscZadana, m_ostatnieWyjscie);
+    return krokObiektu(u);
+}

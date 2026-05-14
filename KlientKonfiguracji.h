@@ -22,19 +22,24 @@
         //void sendMsg(const QJsonObject &json);
         // Przykładowe deklaracje w .h:
         void wyslijKonfigPID(double kp, double ti, double td, int metoda);
-        void wyslijKonfigARX(const std::vector<double>& A, const std::vector<double>& B, int opoznienie, double szum);
+        void wyslijKonfigARX(const std::vector<double>& A, const std::vector<double>& B, int opoznienie, double szum,
+                             double umin, double umax, double ymin, double ymax, bool ograniczenia);
         void wyslijKonfigGen(double amplituda, double okres, int interwal, int typ, double skladowa, double wypelnienie);
         void wyslijAkcjeSymulacji(Akcja akcja, int parametr = 0);
 
+        void wyslijProbkeObiektu(double y);
     signals:
         void connected(QString adr, int port);
         void disconnected();
         //void messageReceived(QJsonObject json);
 
         void odebranoKonfigPID(double kp, double ti, double td, int metoda);
-        void odebranoKonfigARX(std::vector<double> A, std::vector<double> B, int opoznienie, double szum);
+        void odebranoKonfigARX(std::vector<double> A, std::vector<double> B, int opoznienie, double szum,
+                               double umin, double umax, double ymin, double ymax, bool ograniczenia);
         void odebranoKonfigGen(double amplituda, double okres, int interwal, int typ, double skladowa, double wypelnienie);
         void odebranoAkcjeSymulacji(Akcja akcja, int parametr);
+
+        void odebranoProbkeOdRegulatora(double u, double w, double e, double p, double i, double d);
     private slots:
         void slot_connected();
         void slot_readyRead();

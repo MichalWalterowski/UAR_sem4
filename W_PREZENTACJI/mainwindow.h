@@ -66,9 +66,16 @@ private slots:
     // void on_checkBox_toggled(bool checked);
 
     void naOdebranoKonfigPID(double kp, double ti, double td, int metoda);
-    void naOdebranoKonfigARX(std::vector<double> A, std::vector<double> B, int opoznienie, double szum);
+    void naOdebranoKonfigARX(std::vector<double> A, std::vector<double> B, int opoznienie, double szum, double umin, double umax, double ymin, double ymax, bool ograniczenia);
     void naOdebranoKonfigGen(double amplituda, double okres, int interwal, int typ, double skladowa, double wypelnienie);
     void naOdebranoAkcjeSymulacji(Akcja akcja, int parametr);
+
+    void aktualizujStatusRT(bool ok);
+    //void naWyslijProbke(double val);
+    void naNadajZRegulatora(double u, double w, double e, double p, double i, double d);
+    void naNadajZObiektu(double y);
+
+    void aktualizujPing(int pingMs);
 
 private:
     Ui::MainWindow *ui;
@@ -91,6 +98,9 @@ private:
     void odswiezGUI();
 
     void ustawTrybGUI(TrybPracy tryb);
+
+    QLabel* m_ledStatus; // Dioda LED
+    QLabel* m_labelPing;
 };
 
 #endif // MAINWINDOW_H

@@ -16,6 +16,10 @@ KlasaUslugowa::KlasaUslugowa(QObject *parent)
             m_symulacja.getUchyb()
             );
     });
+    connect(&m_symulacja, &Symulacja::wyslijZRegulatoraDoSieci, this, &KlasaUslugowa::nadajZRegulatora);
+    connect(&m_symulacja, &Symulacja::wyslijZObiektuDoSieci, this, &KlasaUslugowa::nadajZObiektu);
+    connect(&m_symulacja, &Symulacja::statusCzasuRzeczywistego, this, &KlasaUslugowa::statusWyrabiania);
+    connect(&m_symulacja, &Symulacja::pingZaktualizowany, this, &KlasaUslugowa::nowyPing);
 }
 
 void KlasaUslugowa::start() { m_symulacja.uruchom(); }
@@ -50,9 +54,13 @@ double KlasaUslugowa::getWartoscWyjscie() const { return m_symulacja.getWartoscW
 double KlasaUslugowa::getSterowanie() const { return m_symulacja.getSterowanie(); }
 double KlasaUslugowa::getUchyb() const { return m_symulacja.getUchyb(); }
 
-double KlasaUslugowa::getPidLastP() const { return m_symulacja.pobierzRegulator().getLastP(); }
-double KlasaUslugowa::getPidLastI() const { return m_symulacja.pobierzRegulator().getLastI(); }
-double KlasaUslugowa::getPidLastD() const { return m_symulacja.pobierzRegulator().getLastD(); }
+// double KlasaUslugowa::getPidLastP() const { return m_symulacja.pobierzRegulator().getLastP(); }
+// double KlasaUslugowa::getPidLastI() const { return m_symulacja.pobierzRegulator().getLastI(); }
+// double KlasaUslugowa::getPidLastD() const { return m_symulacja.pobierzRegulator().getLastD(); }
+
+double KlasaUslugowa::getPidLastP() const { return m_symulacja.getPidP(); }
+double KlasaUslugowa::getPidLastI() const { return m_symulacja.getPidI(); }
+double KlasaUslugowa::getPidLastD() const { return m_symulacja.getPidD(); }
 
 // GETTERY KONFIGURACYJNE
 double KlasaUslugowa::getGenAmplituda() const { return m_symulacja.pobierzGenerator().getAmplituda(); }
@@ -94,3 +102,14 @@ void KlasaUslugowa::fromJson(const QJsonObject& root) {
     reset();
 }
 
+void KlasaUslugowa::ustawTrybSymulacji(int tryb) {
+    m_symulacja.ustawTryb(static_cast<TrybSymulacji>(tryb));
+}
+// void KlasaUslugowa::odbierzProbkeZSieci(double val) {
+//     m_symulacja.odbierzZSieci(val);
+// }
+
+void KlasaUslugowa::odbierzZSieciOdObiektu(double y) { m_symulacja.odbierzZSieciOdObiektu(y); }
+void KlasaUslugowa::odbierzZSieciOdRegulatora(double u, double w, double e, double p, double i, double d) {
+    m_symulacja.odbierzZSieciOdRegulatora(u, w, e, p, i, d);
+}

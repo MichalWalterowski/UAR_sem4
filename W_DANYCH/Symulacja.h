@@ -6,8 +6,11 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <vector>
+#include <QDateTime>
 #include "GeneratorWartosciZadanej.h"
 #include "ProstyUAR.h"
+
+enum class TrybSymulacji { Lokalny, SiecRegulator, SiecObiekt };
 
 class Symulacja : public QObject
 {
@@ -26,6 +29,14 @@ private:
     double m_wartoscWyjscie;
     double m_sterowanie;
     double m_uchyb;
+
+    TrybSymulacji m_tryb = TrybSymulacji::Lokalny;
+    bool m_czyPrzyszlaOdpowiedz = true;
+    double m_ostatnieOdebraneY = 0.0;
+
+    qint64 m_czasWyslania = 0;
+
+    double m_odbW = 0.0, m_odbE = 0.0, m_odbP = 0.0, m_odbI = 0.0, m_odbD = 0.0;
 
 public:
     explicit Symulacja(QObject *parent = nullptr);
@@ -70,8 +81,23 @@ public:
     ModelARX pobierzModel() const;
     RegulatorPID pobierzRegulator() const;
 
+    void ustawTryb(TrybSymulacji tryb);
+    //void odbierzZSieci(double wartosc);
+    void odbierzZSieciOdRegulatora(double u, double w, double e, double p, double i, double d);
+    void odbierzZSieciOdObiektu(double y);
+
+    double getPidP() const;
+    double getPidI() const;
+    double getPidD() const;
 signals:
     void krokWykonany();
+
+    //void wyslijDoSieci(double wartosc);
+    void wyslijZRegulatoraDoSieci(double u, double w, double e, double p, double i, double d);
+    void wyslijZObiektuDoSieci(double y);
+    void statusCzasuRzeczywistego(bool wyrabiaSie);
+
+    void pingZaktualizowany(int pingMs);
 
 private slots:
     void onTimerTimeout();

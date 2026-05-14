@@ -48,7 +48,8 @@
         m_socket.write(ramka);
     }
 
-    void MyTCPClient::wyslijKonfigARX(const std::vector<double>& A, const std::vector<double>& B, int opoznienie, double szum) {
+    void MyTCPClient::wyslijKonfigARX(const std::vector<double>& A, const std::vector<double>& B, int opoznienie, double szum,
+                                      double umin, double umax, double ymin, double ymax, bool ograniczenia) {
         if (!isConnected()) return;
 
         QByteArray ramka;
@@ -66,6 +67,8 @@
         for(double v : B) out << v;
 
         out << opoznienie << szum;
+
+        out << umin << umax << ymin << ymax << ograniczenia;
 
         out.device()->seek(0);
         out << (quint32)(ramka.size() - sizeof(quint32));
@@ -155,9 +158,9 @@
             case TypRamki::KonfigARX: {
                 std::vector<double> A, B;
                 quint32 sizeA, sizeB;
-                double val;
+                double val, umin, umax, ymin, ymax, szum;
                 int opoznienie;
-                double szum;
+                bool ograniczenia;
 
                 in >> sizeA;
                 for(quint32 i=0; i<sizeA; ++i) { in >> val; A.push_back(val); }
@@ -166,7 +169,10 @@
                 for(quint32 i=0; i<sizeB; ++i) { in >> val; B.push_back(val); }
 
                 in >> opoznienie >> szum;
-                emit odebranoKonfigARX(A, B, opoznienie, szum);
+
+                in >> umin >> umax >> ymin >> ymax >> ograniczenia;
+
+                emit odebranoKonfigARX(A, B, opoznienie, szum, umin, umax, ymin, ymax, ograniczenia);
                 break;
             }
             case TypRamki::KonfigGeneratora: {
@@ -189,6 +195,12 @@
                 emit odebranoAkcjeSymulacji(akcja, parametr);
                 break;
             }
+            case TypRamki::ProbkaOdRegulatora: {
+                double u, w, e, p, i, d;
+                in >> u >> w >> e >> p >> i >> d;
+                emit odebranoProbkeOdRegulatora(u, w, e, p, i, d);
+                break;
+            }
             default:
                 break;
             }
@@ -197,4 +209,22 @@
             if (m_socket.bytesAvailable() == 0) break;
 
         }
+    }
+
+    void MyTCPClient::wyslijProbkeObiektu(double y) {
+        if (!isConnected()) return;
+
+        QByteArray ramka;
+        QDataStream out(&ramka, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_6_0);
+
+        out << (quint32)0; // Miejsce na rozmiar ramki
+        out << (quint8)TypRamki::ProbkaOdObiektu; // Typ ramki
+        out << y; // Nasza próbka (u lub y)
+
+        // Wpisanie właściwego rozmiaru na początek
+        out.device()->seek(0);
+        out << (quint32)(ramka.size() - sizeof(quint32));
+
+        m_socket.write(ramka);
     }
