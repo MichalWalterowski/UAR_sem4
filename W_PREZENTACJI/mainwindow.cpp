@@ -477,6 +477,12 @@ void MainWindow::on_pushPolaczSiec_clicked()
 {
     // --- NOWA LOGIKA: ROZŁĄCZANIE (Togle) ---
     if (m_obecnyTryb != TrybPracy::Stacjonarny) {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Rozłącz", "Czy na pewno rozłączyć?",
+                                      QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::No) {
+            return;
+        }
         // Zatrzymujemy Serwer
         if (m_serwer) {
             disconnect(m_serwer, nullptr, nullptr, nullptr); // Odpinamy sygnały, by uniknąć pop-upu
