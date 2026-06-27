@@ -566,6 +566,11 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
     case TrybPracy::Stacjonarny:
         // Włączamy wszystkie sekcje konfiguracyjne
         ui->groupBox_Sim->setEnabled(true);
+        ui->pushStart->setEnabled(true);
+        ui->pushStop->setEnabled(true);
+        ui->pushResetSym->setEnabled(true);
+        ui->spinInterwal->setEnabled(true);
+
         ui->groupBox_Gen->setEnabled(true);
         ui->groupBox_PID->setEnabled(true);
         ui->groupBox_ARX->setEnabled(true);
@@ -577,6 +582,11 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
     case TrybPracy::SieciowyRegulator:
         // Regulator: aktywny Generator, PID, Symulacja. Blokada ARX (działa zdalnie).
         ui->groupBox_Sim->setEnabled(true);
+        ui->pushStart->setEnabled(true);
+        ui->pushStop->setEnabled(true);
+        ui->pushResetSym->setEnabled(true);
+        ui->spinInterwal->setEnabled(true);
+
         ui->groupBox_Gen->setEnabled(true);
         ui->groupBox_PID->setEnabled(true);
         ui->groupBox_ARX->setEnabled(false);
@@ -587,7 +597,12 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
 
     case TrybPracy::SieciowyObiekt:
         // Obiekt: tylko ARX aktywny. Reszta sterowana z zewnątrz.
-        ui->groupBox_Sim->setEnabled(false);
+        ui->groupBox_Sim->setEnabled(true);
+        ui->pushStart->setEnabled(false);
+        ui->pushStop->setEnabled(false);
+        ui->pushResetSym->setEnabled(false);
+        ui->spinInterwal->setEnabled(false);
+
         ui->groupBox_Gen->setEnabled(false);
         ui->groupBox_PID->setEnabled(false);
         ui->groupBox_ARX->setEnabled(true);

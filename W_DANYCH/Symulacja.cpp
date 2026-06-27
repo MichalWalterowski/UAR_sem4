@@ -202,12 +202,15 @@ void Symulacja::uruchom() {
 void Symulacja::odbierzZSieciOdObiektu(double wartosc) {
     if (m_tryb == TrybSymulacji::SiecRegulator) {
         m_ostatnieOdebraneY = wartosc;
+        m_wartoscWyjscie = wartosc;
         m_czyPrzyszlaOdpowiedz = true; // Paczka dotarła!
 
         if (m_czasWyslania > 0) {
             int ping = static_cast<int>(QDateTime::currentMSecsSinceEpoch() - m_czasWyslania);
             emit pingZaktualizowany(ping);
         }
+
+        emit krokWykonany();
     }
     // else if (m_tryb == TrybSymulacji::SiecObiekt) {
     //     if (!m_czyDziala) return;
@@ -241,24 +244,53 @@ void Symulacja::onTimerTimeout() {
         emit statusCzasuRzeczywistego(true);
         emit krokWykonany();
     }
-    else if (m_tryb == TrybSymulacji::SiecRegulator) {
-        // Test czy symulacja "się wyrabia"
-        emit statusCzasuRzeczywistego(m_czyPrzyszlaOdpowiedz);
-        m_czyPrzyszlaOdpowiedz = false; // Reset na poczet kolejnej próbki
+    // else if (m_tryb == TrybSymulacji::SiecRegulator) {
+    //     // Test czy symulacja "się wyrabia"
+    //     emit statusCzasuRzeczywistego(m_czyPrzyszlaOdpowiedz);
+    //     m_czyPrzyszlaOdpowiedz = false; // Reset na poczet kolejnej próbki
 
+    //     m_czasWyslania = QDateTime::currentMSecsSinceEpoch();
+
+    //     m_wartoscZadana = m_generator.generuj();
+    //     m_generator.krokSymulacji();
+
+    //     // Liczy nowe u na bazie ostatnio znanego y
+    //     m_sterowanie = m_prostyUAR.krokRegulatora(m_wartoscZadana, m_ostatnieOdebraneY);
+    //     m_wartoscWyjscie = m_ostatnieOdebraneY; // Do poprawnego rysowania na wykresie regulatora
+    //     m_uchyb = m_prostyUAR.getOstatniUchyb();
+    //     m_czas += m_generator.getInterwal() / 1000.0;
+
+    //     emit wyslijZRegulatoraDoSieci(m_sterowanie, m_wartoscZadana, m_uchyb, getPidP(), getPidI(), getPidD()); // Wysyła u w świat
+    //     emit krokWykonany();
+    // }
+    else if (m_tryb == TrybSymulacji::SiecRegulator) {
+        // 1. Najpierw oceniamy sytuację z POPRZEDNIEGO taktu
+        emit statusCzasuRzeczywistego(m_czyPrzyszlaOdpowiedz);
+
+        // 2. Jeśli paczka z poprzedniego taktu nie wróciła, ratujemy wykres (ZOH)
+        if (!m_czyPrzyszlaOdpowiedz) {
+            m_wartoscWyjscie = m_ostatnieOdebraneY;
+            emit krokWykonany();
+        }
+
+        // 3. Zbrajamy pułapkę na NOWĄ próbkę
+        m_czyPrzyszlaOdpowiedz = false;
         m_czasWyslania = QDateTime::currentMSecsSinceEpoch();
 
+        // 4. Generujemy nowe zmienne
         m_wartoscZadana = m_generator.generuj();
         m_generator.krokSymulacji();
-
-        // Liczy nowe u na bazie ostatnio znanego y
         m_sterowanie = m_prostyUAR.krokRegulatora(m_wartoscZadana, m_ostatnieOdebraneY);
-        m_wartoscWyjscie = m_ostatnieOdebraneY; // Do poprawnego rysowania na wykresie regulatora
         m_uchyb = m_prostyUAR.getOstatniUchyb();
+
+        // 5. Przesuwamy czas do przodu
         m_czas += m_generator.getInterwal() / 1000.0;
 
-        emit wyslijZRegulatoraDoSieci(m_sterowanie, m_wartoscZadana, m_uchyb, getPidP(), getPidI(), getPidD()); // Wysyła u w świat
-        emit krokWykonany();
+        // 6. Wysyłamy dane w sieć
+        emit wyslijZRegulatoraDoSieci(m_sterowanie, m_wartoscZadana, m_uchyb, getPidP(), getPidI(), getPidD());
+
+        // UWAGA: NA KOŃCU NIE MA JUŻ "emit krokWykonany();" !!!
+        // Prawidłowy punkt narysuje się dopiero wtedy, gdy wywoła się "odbierzZSieciOdObiektu"
     }
 }
 
