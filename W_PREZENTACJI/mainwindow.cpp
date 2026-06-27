@@ -464,16 +464,12 @@ void MainWindow::on_pushPolaczSiec_clicked()
 {
     // --- ROZŁĄCZANIE ---
     if (m_obecnyTryb != TrybPracy::Stacjonarny) {
-<<<<<<< Updated upstream
-        // Zatrzymujemy Serwer
-=======
         QMessageBox::StandardButton reply;
         reply = QMessageBox::question(this, "Rozłącz", "Czy na pewno rozłączyć?",
                                       QMessageBox::Yes|QMessageBox::No);
         if (reply == QMessageBox::No) {
             return;
         }
->>>>>>> Stashed changes
         if (m_serwer) {
             disconnect(m_serwer, nullptr, nullptr, nullptr);
             m_serwer->stopListening();
@@ -555,6 +551,11 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
     switch (tryb) {
     case TrybPracy::Stacjonarny:
         ui->groupBox_Sim->setEnabled(true);
+        ui->pushStart->setEnabled(true);
+        ui->pushStop->setEnabled(true);
+        ui->pushResetSym->setEnabled(true);
+        ui->spinInterwal->setEnabled(true);
+
         ui->groupBox_Gen->setEnabled(true);
         ui->groupBox_PID->setEnabled(true);
         ui->groupBox_ARX->setEnabled(true);
@@ -565,6 +566,11 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
 
     case TrybPracy::SieciowyRegulator:
         ui->groupBox_Sim->setEnabled(true);
+        ui->pushStart->setEnabled(true);
+        ui->pushStop->setEnabled(true);
+        ui->pushResetSym->setEnabled(true);
+        ui->spinInterwal->setEnabled(true);
+
         ui->groupBox_Gen->setEnabled(true);
         ui->groupBox_PID->setEnabled(true);
         ui->groupBox_ARX->setEnabled(false);
@@ -574,17 +580,12 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
         break;
 
     case TrybPracy::SieciowyObiekt:
-<<<<<<< Updated upstream
-        // Obiekt: tylko ARX aktywny. Reszta sterowana z zewnątrz.
-        ui->groupBox_Sim->setEnabled(false);
-=======
         ui->groupBox_Sim->setEnabled(true);
         ui->pushStart->setEnabled(false);
         ui->pushStop->setEnabled(false);
         ui->pushResetSym->setEnabled(false);
         ui->spinInterwal->setEnabled(false);
 
->>>>>>> Stashed changes
         ui->groupBox_Gen->setEnabled(false);
         ui->groupBox_PID->setEnabled(false);
         ui->groupBox_ARX->setEnabled(true);

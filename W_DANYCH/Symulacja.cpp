@@ -194,17 +194,15 @@ void Symulacja::uruchom() {
 void Symulacja::odbierzZSieciOdObiektu(double wartosc) {
     if (m_tryb == TrybSymulacji::SiecRegulator) {
         m_ostatnieOdebraneY = wartosc;
-<<<<<<< Updated upstream
-        m_czyPrzyszlaOdpowiedz = true; // Paczka dotarła!
-=======
         m_wartoscWyjscie = wartosc;
         m_czyPrzyszlaOdpowiedz = true;
->>>>>>> Stashed changes
 
         if (m_czasWyslania > 0) {
             int ping = static_cast<int>(QDateTime::currentMSecsSinceEpoch() - m_czasWyslania);
             emit pingZaktualizowany(ping);
         }
+
+        emit krokWykonany();
     }
 }
 
@@ -230,42 +228,25 @@ void Symulacja::onTimerTimeout() {
         emit krokWykonany();
     }
     else if (m_tryb == TrybSymulacji::SiecRegulator) {
-<<<<<<< Updated upstream
-        // Test czy symulacja "się wyrabia"
-=======
->>>>>>> Stashed changes
         emit statusCzasuRzeczywistego(m_czyPrzyszlaOdpowiedz);
-        m_czyPrzyszlaOdpowiedz = false; // Reset na poczet kolejnej próbki
 
-<<<<<<< Updated upstream
-=======
         if (!m_czyPrzyszlaOdpowiedz) {
             m_wartoscWyjscie = m_ostatnieOdebraneY;
             emit krokWykonany();
         }
 
         m_czyPrzyszlaOdpowiedz = false;
->>>>>>> Stashed changes
         m_czasWyslania = QDateTime::currentMSecsSinceEpoch();
 
         m_wartoscZadana = m_generator.generuj();
         m_generator.krokSymulacji();
-
-<<<<<<< Updated upstream
-        // Liczy nowe u na bazie ostatnio znanego y
         m_sterowanie = m_prostyUAR.krokRegulatora(m_wartoscZadana, m_ostatnieOdebraneY);
-        m_wartoscWyjscie = m_ostatnieOdebraneY; // Do poprawnego rysowania na wykresie regulatora
         m_uchyb = m_prostyUAR.getOstatniUchyb();
-        m_czas += m_generator.getInterwal() / 1000.0;
 
-        emit wyslijZRegulatoraDoSieci(m_sterowanie, m_wartoscZadana, m_uchyb, getPidP(), getPidI(), getPidD()); // Wysyła u w świat
-        emit krokWykonany();
-=======
         m_czas += m_generator.getInterwal() / 1000.0;
 
         emit wyslijZRegulatoraDoSieci(m_sterowanie, m_wartoscZadana, m_uchyb, getPidP(), getPidI(), getPidD());
 
->>>>>>> Stashed changes
     }
 }
 
