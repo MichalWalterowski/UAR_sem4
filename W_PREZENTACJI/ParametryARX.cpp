@@ -40,13 +40,6 @@ void ParametryARX::ustawDane(const std::vector<double>& a, const std::vector<dou
         ui->spinZaklocenie->setValue(szum);
     }
 
-    /*
-    if (umin <= std::numeric_limits<double>::min() && ymin <= std::numeric_limits<double>::min() && umax >= std::numeric_limits<double>::max() && ymax <= std::numeric_limits<double>::max())   {
-        ui->checkOgraniczenia->setChecked(false);
-    }
-    else ui->checkOgraniczenia->setChecked(true);
-    */
-
     ui->spinMinU->setValue(umin);
     ui->spinMaxU->setValue(umax);
     ui->spinMinY->setValue(ymin);
@@ -71,36 +64,17 @@ void ParametryARX::on_pushZapisz_clicked()
 
     int opoznienie = ui->spinOpoznienie->value();
     double szum = (ui->spinZaklocenie) ? ui->spinZaklocenie->value() : 0.0;
-    double uMin;// = ui->spinMinU->value();
-    double uMax;// = ui->spinMaxU->value();
-    double yMin;// = ui->spinMinY->value();
-    double yMax;// = ui->spinMaxY->value();
-
-    // wartości min < wartości max
+    double uMin;
+    double uMax;
+    double yMin;
+    double yMax;
 
 
-    //if (ui->checkOgraniczenia->isChecked()) {
         uMin = ui->spinMinU->value();
         uMax = ui->spinMaxU->value();
         yMin = ui->spinMinY->value();
         yMax = ui->spinMaxY->value();
-    /*} else {
-        // Symulacja braku ograniczeń (ogromne limity)
-        uMin = std::numeric_limits<double>::min(); uMax = std::numeric_limits<double>::max();
-        yMin = std::numeric_limits<double>::min(); yMax = std::numeric_limits<double>::max();
-    }
-    */
-    if (uMin >= uMax) {
-        QMessageBox::warning(this, "Błąd", "Nasycenie wejścia: Min U musi być mniejsze od Max U!");
-        return;
-    }
-    if (yMin >= yMax) {
-        QMessageBox::warning(this, "Błąd", "Nasycenie wyjścia: Min Y musi być mniejsze od Max Y!");
-        return;
-    }
 
-
-    // wartości min < wartości max
     if (uMin >= uMax) {
         QMessageBox::warning(this, "Błąd", "Nasycenie wejścia: Min U musi być mniejsze od Max U!");
         return;
@@ -131,7 +105,6 @@ std::vector<double> ParametryARX::stringToVector(const QString& str) const
         bool ok;
         double val = tempS.toDouble(&ok);
         if(ok) {
-            // zakres: <-2.0, 2.0>
             val = std::clamp(val, -2.0, 2.0);
             vec.push_back(val);
         }

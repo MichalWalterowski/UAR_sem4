@@ -63,7 +63,6 @@ private slots:
 
     void resetSymulacji();
 
-    // void on_checkBox_toggled(bool checked);
 
     void naOdebranoKonfigPID(double kp, double ti, double td, int metoda);
     void naOdebranoKonfigARX(std::vector<double> A, std::vector<double> B, int opoznienie, double szum, double umin, double umax, double ymin, double ymax, bool ograniczenia);
@@ -71,7 +70,6 @@ private slots:
     void naOdebranoAkcjeSymulacji(Akcja akcja, int parametr);
 
     void aktualizujStatusRT(bool ok);
-    //void naWyslijProbke(double val);
     void naNadajZRegulatora(double u, double w, double e, double p, double i, double d);
     void naNadajZObiektu(double y);
 
@@ -99,7 +97,7 @@ private:
 
     void ustawTrybGUI(TrybPracy tryb);
 
-    QLabel* m_ledStatus; // Dioda LED
+    QLabel* m_ledStatus;
     QLabel* m_labelPing;
 };
 

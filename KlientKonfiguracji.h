@@ -19,8 +19,6 @@
         void disconnectFrom();
         bool isConnected() {return m_socket.isOpen();}
 
-        //void sendMsg(const QJsonObject &json);
-        // Przykładowe deklaracje w .h:
         void wyslijKonfigPID(double kp, double ti, double td, int metoda);
         void wyslijKonfigARX(const std::vector<double>& A, const std::vector<double>& B, int opoznienie, double szum,
                              double umin, double umax, double ymin, double ymax, bool ograniczenia);
@@ -31,7 +29,6 @@
     signals:
         void connected(QString adr, int port);
         void disconnected();
-        //void messageReceived(QJsonObject json);
 
         void odebranoKonfigPID(double kp, double ti, double td, int metoda);
         void odebranoKonfigARX(std::vector<double> A, std::vector<double> B, int opoznienie, double szum,

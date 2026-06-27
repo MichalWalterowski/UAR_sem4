@@ -95,13 +95,7 @@ void Symulacja::fromJson(const QJsonObject& root)
             );
     }
 }
-/*
-void Symulacja::onTimerTimeout() {
-    wykonajKrok();
-    emit krokWykonany();
-}
-*/
-//void Symulacja::uruchom() { m_czyDziala = true; m_timer->start(); }
+
 void Symulacja::zatrzymaj() { m_czyDziala = false; m_timer->stop(); }
 
 void Symulacja::setInterwal(int ms) {
@@ -174,10 +168,8 @@ double Symulacja::getModelUMIN() const { return m_prostyUAR.pobierzModel().getUM
 double Symulacja::getModelUMAX() const { return m_prostyUAR.pobierzModel().getUMAX(); }
 double Symulacja::getModelYMIN() const { return m_prostyUAR.pobierzModel().getYMIN(); }
 double Symulacja::getModelYMAX() const { return m_prostyUAR.pobierzModel().getYMAX(); }
-//double Symulacja::getWartoscZadana() const { return m_wartoscZadana; }
 double Symulacja::getWartoscWyjscie() const { return m_wartoscWyjscie; }
 double Symulacja::getSterowanie() const { return m_sterowanie; }
-//double Symulacja::getUchyb() const { return m_uchyb; }
 double Symulacja::getCzas() const { return m_czas; }
 bool Symulacja::czyDziala() const { return m_czyDziala; }
 int Symulacja::getInterwalMs() const { return m_generator.getInterwal(); }
@@ -193,7 +185,7 @@ void Symulacja::ustawTryb(TrybSymulacji tryb) {
 
 void Symulacja::uruchom() {
     m_czyDziala = true;
-    // Obiekt nie odpala własnego zegara - czeka biernie na paczki!
+
     if (m_tryb != TrybSymulacji::SiecObiekt) {
         m_timer->start();
     }
@@ -202,29 +194,25 @@ void Symulacja::uruchom() {
 void Symulacja::odbierzZSieciOdObiektu(double wartosc) {
     if (m_tryb == TrybSymulacji::SiecRegulator) {
         m_ostatnieOdebraneY = wartosc;
+<<<<<<< Updated upstream
         m_czyPrzyszlaOdpowiedz = true; // Paczka dotarła!
+=======
+        m_wartoscWyjscie = wartosc;
+        m_czyPrzyszlaOdpowiedz = true;
+>>>>>>> Stashed changes
 
         if (m_czasWyslania > 0) {
             int ping = static_cast<int>(QDateTime::currentMSecsSinceEpoch() - m_czasWyslania);
             emit pingZaktualizowany(ping);
         }
     }
-    // else if (m_tryb == TrybSymulacji::SiecObiekt) {
-    //     if (!m_czyDziala) return;
-    //     m_sterowanie = wartosc; // Obiekt dostał u
-    //     m_wartoscWyjscie = m_prostyUAR.krokObiektu(m_sterowanie); // Liczy y
-    //     m_czas += m_generator.getInterwal() / 1000.0;
-
-    //     emit wyslijDoSieci(m_wartoscWyjscie); // Odsyła y
-    //     emit krokWykonany(); // Odświeża własne wykresy
-    // }
 }
 
 void Symulacja::odbierzZSieciOdRegulatora(double u, double w, double e, double p, double i, double d) {
     if (m_tryb == TrybSymulacji::SiecObiekt) {
         if (!m_czyDziala) return;
         m_sterowanie = u;
-        // Zapisujemy resztę do buforów dla wykresów
+
         m_odbW = w; m_odbE = e; m_odbP = p; m_odbI = i; m_odbD = d;
 
         m_wartoscWyjscie = m_prostyUAR.krokObiektu(m_sterowanie);
@@ -242,15 +230,28 @@ void Symulacja::onTimerTimeout() {
         emit krokWykonany();
     }
     else if (m_tryb == TrybSymulacji::SiecRegulator) {
+<<<<<<< Updated upstream
         // Test czy symulacja "się wyrabia"
+=======
+>>>>>>> Stashed changes
         emit statusCzasuRzeczywistego(m_czyPrzyszlaOdpowiedz);
         m_czyPrzyszlaOdpowiedz = false; // Reset na poczet kolejnej próbki
 
+<<<<<<< Updated upstream
+=======
+        if (!m_czyPrzyszlaOdpowiedz) {
+            m_wartoscWyjscie = m_ostatnieOdebraneY;
+            emit krokWykonany();
+        }
+
+        m_czyPrzyszlaOdpowiedz = false;
+>>>>>>> Stashed changes
         m_czasWyslania = QDateTime::currentMSecsSinceEpoch();
 
         m_wartoscZadana = m_generator.generuj();
         m_generator.krokSymulacji();
 
+<<<<<<< Updated upstream
         // Liczy nowe u na bazie ostatnio znanego y
         m_sterowanie = m_prostyUAR.krokRegulatora(m_wartoscZadana, m_ostatnieOdebraneY);
         m_wartoscWyjscie = m_ostatnieOdebraneY; // Do poprawnego rysowania na wykresie regulatora
@@ -259,10 +260,16 @@ void Symulacja::onTimerTimeout() {
 
         emit wyslijZRegulatoraDoSieci(m_sterowanie, m_wartoscZadana, m_uchyb, getPidP(), getPidI(), getPidD()); // Wysyła u w świat
         emit krokWykonany();
+=======
+        m_czas += m_generator.getInterwal() / 1000.0;
+
+        emit wyslijZRegulatoraDoSieci(m_sterowanie, m_wartoscZadana, m_uchyb, getPidP(), getPidI(), getPidD());
+
+>>>>>>> Stashed changes
     }
 }
 
-//
+
 double Symulacja::getWartoscZadana() const { return (m_tryb == TrybSymulacji::SiecObiekt) ? m_odbW : m_wartoscZadana; }
 double Symulacja::getUchyb() const { return (m_tryb == TrybSymulacji::SiecObiekt) ? m_odbE : m_uchyb; }
 

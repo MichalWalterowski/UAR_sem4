@@ -12,15 +12,14 @@
 static constexpr double DOMYSLNE_OKNO_CZASOWE = 10.0;
 static constexpr double MARGINES_Y = 0.1;
 
-//enum class TrybAplikacji { Stacjonarny, SieciowyRegulator, SieciowyObiekt };
 
 MainWindow::MainWindow(QWidget *parent, KlasaUslugowa *usluga)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , m_usluga(usluga)
     , m_oknoCzasowe(DOMYSLNE_OKNO_CZASOWE)
-    , m_serwer(nullptr) // Inicjalizacja
-    , m_klient(nullptr) // Inicjalizacja
+    , m_serwer(nullptr)
+    , m_klient(nullptr)
 {
     ui->setupUi(this);
 
@@ -33,10 +32,8 @@ MainWindow::MainWindow(QWidget *parent, KlasaUslugowa *usluga)
     m_labelPing = new QLabel(" Ping: --- ms ");
     ui->statusbar->addPermanentWidget(m_labelPing);
 
-    // I podepnij sygnał z usługi:
     connect(m_usluga, &KlasaUslugowa::nowyPing, this, &MainWindow::aktualizujPing);
 
-    //connect(m_usluga, &KlasaUslugowa::wyslijProbkeDoSieci, this, &MainWindow::naWyslijProbke);
     connect(m_usluga, &KlasaUslugowa::statusWyrabiania, this, &MainWindow::aktualizujStatusRT);
     connect(m_usluga, &KlasaUslugowa::nadajZRegulatora, this, &MainWindow::naNadajZRegulatora);
     connect(m_usluga, &KlasaUslugowa::nadajZObiektu, this, &MainWindow::naNadajZObiektu);
@@ -185,7 +182,7 @@ void MainWindow::zarzadzajWykresem(QChart* chart, double t)
         currentWidth = m_oknoCzasowe;
     }
 
-    if (std::abs(currentWidth - m_oknoCzasowe) > 0,000001) {
+    if (std::abs(currentWidth - m_oknoCzasowe) > 0.000001) {
         maxX = minX + m_oknoCzasowe;
     }
 
@@ -361,7 +358,7 @@ void MainWindow::on_pushConfigARX_clicked() {
 void MainWindow::odbierzParametryARX(std::vector<double> a, std::vector<double> b, int k, double szum, double umin, double umax, double ymin, double ymax, bool ograniczenia) {
     m_usluga->ustawModel(a, b, k, szum, umin, umax, ymin, ymax, ograniczenia);
 
-    // WYSYŁANIE PRZEZ SIEĆ (Tylko obiekt to może edytować, więc tylko on wysyła)
+    // WYSYŁANIE PRZEZ SIEĆ (Tylko obiekt może edytować)
     if (m_obecnyTryb == TrybPracy::SieciowyObiekt && m_klient && m_klient->isConnected()) {
         m_klient->wyslijKonfigARX(a, b, k, szum, umin, umax, ymin, ymax, ograniczenia);
     }
@@ -391,7 +388,6 @@ void MainWindow::on_pushLoadConfig_clicked() {
         if (!doc.isObject()) return;
 
         m_usluga->fromJson(doc.object());
-        //odswiezGUI();
         resetSymulacji();
     }
 }
@@ -463,30 +459,29 @@ void MainWindow::on_spinOknoObserwacji_editingFinished()
     zarzadzajWykresem(m_chartPID, t);
 }
 
-
-
-
-
-// void MainWindow::on_checkBox_toggled(bool checked)
-// {
-
-// }
-
-// Funkcja wywoływana po kliknięciu przycisku "Sieć / Połącz" w głównym oknie
+// Funkcja po kliknięciu przycisku Połącz w głównym oknie
 void MainWindow::on_pushPolaczSiec_clicked()
 {
-    // --- NOWA LOGIKA: ROZŁĄCZANIE (Togle) ---
+    // --- ROZŁĄCZANIE ---
     if (m_obecnyTryb != TrybPracy::Stacjonarny) {
+<<<<<<< Updated upstream
         // Zatrzymujemy Serwer
+=======
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Rozłącz", "Czy na pewno rozłączyć?",
+                                      QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::No) {
+            return;
+        }
+>>>>>>> Stashed changes
         if (m_serwer) {
-            disconnect(m_serwer, nullptr, nullptr, nullptr); // Odpinamy sygnały, by uniknąć pop-upu
+            disconnect(m_serwer, nullptr, nullptr, nullptr);
             m_serwer->stopListening();
             m_serwer->deleteLater();
             m_serwer = nullptr;
         }
-        // Zatrzymujemy Klienta
         if (m_klient) {
-            disconnect(m_klient, nullptr, nullptr, nullptr); // Odpinamy sygnały
+            disconnect(m_klient, nullptr, nullptr, nullptr);
             m_klient->disconnectFrom();
             m_klient->deleteLater();
             m_klient = nullptr;
@@ -495,7 +490,7 @@ void MainWindow::on_pushPolaczSiec_clicked()
         ustawTrybGUI(TrybPracy::Stacjonarny);
         ui->labelCzyPolaczono->setText("Rozłączono ręcznie.");
         m_labelPing->setText(" Ping: --- ms ");
-        return; // Zakończ funkcję, nie otwieraj okna DialogPolaczenie!
+        return;
     }
 
     DialogPolaczenie dialog(this);
@@ -503,27 +498,24 @@ void MainWindow::on_pushPolaczSiec_clicked()
         if (dialog.czySerwer()) {
             ustawTrybGUI(TrybPracy::SieciowyRegulator);
 
-            // Czyszczenie starego połączenia jeśli było
             if(m_serwer) { m_serwer->deleteLater(); }
             m_serwer = new MyTCPServer(this);
 
-            // Podpięcie sygnałów
             connect(m_serwer, &MyTCPServer::odebranoKonfigPID, this, &MainWindow::naOdebranoKonfigPID);
             connect(m_serwer, &MyTCPServer::odebranoKonfigGen, this, &MainWindow::naOdebranoKonfigGen);
             connect(m_serwer, &MyTCPServer::odebranoKonfigARX, this, &MainWindow::naOdebranoKonfigARX);
             connect(m_serwer, &MyTCPServer::odebranoAkcjeSymulacji, this, &MainWindow::naOdebranoAkcjeSymulacji);
-            //connect(m_serwer, &MyTCPServer::odebranoProbke, m_usluga, &KlasaUslugowa::odbierzProbkeZSieci);
             connect(m_serwer, &MyTCPServer::odebranoProbkeOdObiektu, m_usluga, &KlasaUslugowa::odbierzZSieciOdObiektu);
 
             connect(m_serwer, &MyTCPServer::newClientConnected, this, [this](QString adr) {
                 QString msg = "Połączono z klientem. IP: " + adr;
-                ui->labelCzyPolaczono->setText(msg); // Wyświetla w pasku na dole przez 5 sekund
+                ui->labelCzyPolaczono->setText(msg);
             });
 
             connect(m_serwer, &MyTCPServer::clientDisconnected, this, [this](int id) {
                 QMessageBox::warning(this, "Połączenie przerwane",
                                      "Klient rozłączył się. Powrót do trybu stacjonarnego.");
-                ustawTrybGUI(TrybPracy::Stacjonarny); // Przywraca kontrolki ARX
+                ustawTrybGUI(TrybPracy::Stacjonarny);
             });
 
             m_serwer->startListening(dialog.getPort());
@@ -533,12 +525,10 @@ void MainWindow::on_pushPolaczSiec_clicked()
             if(m_klient) { m_klient->deleteLater(); }
             m_klient = new MyTCPClient(this);
 
-            // Podpięcie sygnałów
             connect(m_klient, &MyTCPClient::odebranoKonfigPID, this, &MainWindow::naOdebranoKonfigPID);
             connect(m_klient, &MyTCPClient::odebranoKonfigGen, this, &MainWindow::naOdebranoKonfigGen);
             connect(m_klient, &MyTCPClient::odebranoKonfigARX, this, &MainWindow::naOdebranoKonfigARX);
             connect(m_klient, &MyTCPClient::odebranoAkcjeSymulacji, this, &MainWindow::naOdebranoAkcjeSymulacji);
-            //connect(m_klient, &MyTCPClient::odebranoProbke, m_usluga, &KlasaUslugowa::odbierzProbkeZSieci);
             connect(m_klient, &MyTCPClient::odebranoProbkeOdRegulatora, m_usluga, &KlasaUslugowa::odbierzZSieciOdRegulatora);
 
             connect(m_klient, &MyTCPClient::connected, this, [this](QString adr, int port) {
@@ -549,7 +539,7 @@ void MainWindow::on_pushPolaczSiec_clicked()
             connect(m_klient, &MyTCPClient::disconnected, this, [this]() {
                 QMessageBox::warning(this, "Błąd sieci",
                                      "Utracono połączenie z Serwerem. Powrót do trybu stacjonarnego.");
-                ustawTrybGUI(TrybPracy::Stacjonarny); // Odblokowuje kontrolki PID/Generatora
+                ustawTrybGUI(TrybPracy::Stacjonarny);
             });
 
             m_klient->connectTo(dialog.getIP(), dialog.getPort());
@@ -564,7 +554,6 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
 
     switch (tryb) {
     case TrybPracy::Stacjonarny:
-        // Włączamy wszystkie sekcje konfiguracyjne
         ui->groupBox_Sim->setEnabled(true);
         ui->groupBox_Gen->setEnabled(true);
         ui->groupBox_PID->setEnabled(true);
@@ -575,7 +564,6 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
         break;
 
     case TrybPracy::SieciowyRegulator:
-        // Regulator: aktywny Generator, PID, Symulacja. Blokada ARX (działa zdalnie).
         ui->groupBox_Sim->setEnabled(true);
         ui->groupBox_Gen->setEnabled(true);
         ui->groupBox_PID->setEnabled(true);
@@ -586,8 +574,17 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
         break;
 
     case TrybPracy::SieciowyObiekt:
+<<<<<<< Updated upstream
         // Obiekt: tylko ARX aktywny. Reszta sterowana z zewnątrz.
         ui->groupBox_Sim->setEnabled(false);
+=======
+        ui->groupBox_Sim->setEnabled(true);
+        ui->pushStart->setEnabled(false);
+        ui->pushStop->setEnabled(false);
+        ui->pushResetSym->setEnabled(false);
+        ui->spinInterwal->setEnabled(false);
+
+>>>>>>> Stashed changes
         ui->groupBox_Gen->setEnabled(false);
         ui->groupBox_PID->setEnabled(false);
         ui->groupBox_ARX->setEnabled(true);
@@ -600,7 +597,7 @@ void MainWindow::ustawTrybGUI(TrybPracy tryb)
 
 void MainWindow::naOdebranoKonfigPID(double kp, double ti, double td, int metoda) {
     m_usluga->ustawPID(kp, ti, td, metoda);
-    odswiezGUI(); // Odświeży spinboxy bez wyzwalania sygnałów nadawczych
+    odswiezGUI();
 }
 
 void MainWindow::naOdebranoKonfigGen(double amplituda, double okres, int interwal, int typ, double skladowa, double wypelnienie) {
@@ -610,14 +607,8 @@ void MainWindow::naOdebranoKonfigGen(double amplituda, double okres, int interwa
 
 void MainWindow::naOdebranoKonfigARX(std::vector<double> A, std::vector<double> B, int opoznienie, double szum,
                                      double umin, double umax, double ymin, double ymax, bool ograniczenia) {
-    // Ponieważ ARX ma też ograniczenia (umin, umax itp.), których nie przesyłaliśmy dla oszczędności transferu,
-    // najpierw pobierzmy obecne ograniczenia, a potem zaktualizujmy resztę.
-    // std::vector<double> oldA, oldB;
-    // int oldOp; double oldSzum, uMin, uMax, yMin, yMax; bool ogr;
-    // m_usluga->pobierzModel(oldA, oldB, oldOp, oldSzum, umin, umax, ymin, ymax, ograniczenia);
 
     m_usluga->ustawModel(A, B, opoznienie, szum, umin, umax, ymin, ymax, ograniczenia);
-    // GUI z ARX odpala się z osobnego okna, więc nie trzeba tu wołać odswiezGUI dla ARXa
 }
 
 void MainWindow::naOdebranoAkcjeSymulacji(Akcja akcja, int parametr) {
@@ -630,7 +621,7 @@ void MainWindow::naOdebranoAkcjeSymulacji(Akcja akcja, int parametr) {
         break;
     case Akcja::ZmienInterwal:
         m_usluga->setInterwal(parametr);
-        // Odśwież SpinBox interwału z zablokowaniem sygnałów
+
         ui->spinInterwal->blockSignals(true);
         ui->spinInterwal->setValue(parametr);
         ui->spinInterwal->blockSignals(false);
@@ -648,13 +639,6 @@ void MainWindow::aktualizujStatusRT(bool ok) {
     }
 }
 
-// void MainWindow::naWyslijProbke(double val) {
-//     if (m_obecnyTryb == TrybPracy::SieciowyRegulator && m_serwer) {
-//         m_serwer->wyslijProbke(val);
-//     } else if (m_obecnyTryb == TrybPracy::SieciowyObiekt && m_klient) {
-//         m_klient->wyslijProbke(val);
-//     }
-// }
 
 void MainWindow::naNadajZRegulatora(double u, double w, double e, double p, double i, double d) {
     if (m_obecnyTryb == TrybPracy::SieciowyRegulator && m_serwer) {

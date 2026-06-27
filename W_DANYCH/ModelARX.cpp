@@ -1,6 +1,6 @@
 #include "ModelARX.h"
 #include <stdexcept>
-#include <algorithm> // std::clamp, std::max
+#include <algorithm>
 
 ModelARX::ModelARX(const std::vector<double>& i_A, const std::vector<double>& i_B, int i_op, double i_oss)
     : m_A(i_A), m_B(i_B),

@@ -27,7 +27,6 @@
         void wyslijKonfigGen(double amplituda, double okres, int interwal, int typ, double skladowa, double wypelnienie, int numCli = 0);
         void wyslijAkcjeSymulacji(Akcja akcja, int parametr = 0, int numCli = 0);
 
-        //void sendMsg(const QJsonObject &json, int numCli);
 
         void wyslijProbkeRegulatora(double u, double w, double e, double p, double i, double d, int numCli = 0);
 
@@ -43,13 +42,11 @@
 
         void odebranoProbkeOdObiektu(double y);
 
-        //void newMsgFrom(QJsonObject json, int num);
     private slots:
         void slot_new_client();
         void slot_client_disconnected();
         void slot_newMsg();
     private:
-        //int getClinetID();
         bool m_isListening = false;
         int m_port = 12345;
         QTcpServer m_server;

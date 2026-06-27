@@ -18,22 +18,6 @@
     int MyTCPServer::getNumClients() {
         return m_clients.length();
     }
-    // void MyTCPServer::sendMsg(const QJsonObject &json, int numCli) {
-    //     if (numCli >= m_clients.length() || numCli < 0) return;
-
-    //     QJsonDocument doc(json);
-    //     QByteArray data = doc.toJson(QJsonDocument::Compact);
-
-    //     QByteArray ramka;
-    //     QDataStream out(&ramka, QIODevice::WriteOnly);
-    //     out.setVersion(QDataStream::Qt_6_0);
-    //     out << (quint32)0;
-    //     out.device()->write(data);
-    //     out.device()->seek(0);
-    //     out << (quint32)(ramka.size() - sizeof(quint32));
-
-    //     m_clients.at(numCli)->write(ramka);
-    // }
 
     void MyTCPServer::wyslijKonfigPID(double kp, double ti, double td, int metoda, int numCli) {
         if (numCli >= m_clients.length() || numCli < 0) return;
@@ -108,10 +92,6 @@
         m_clients.at(numCli)->write(ramka);
     }
 
-    // int MyTCPServer::getClinetID() {
-    //     QTcpSocket *client = static_cast<QTcpSocket*> (QObject::sender());
-    //     return m_clients.indexOf(client);
-    // }
     void MyTCPServer::slot_new_client()
     {
         QTcpSocket *client = m_server.nextPendingConnection();
@@ -124,21 +104,9 @@
         connect(client, SIGNAL(readyRead()), this, SLOT(slot_newMsg()));
 
         emit newClientConnected(adr.toString());
-        // auto adr = client->peerAddress();
-        // QString msgBack = "Hello client " +
-        // QString::number( m_clients.indexOf(client));
-        // client->write(msgBack.toUtf8());
-        // connect(client,SIGNAL(disconnected()),
-        // this,SLOT(slot_client_disconnetcted()));
-        // connect(client,SIGNAL(readyRead()),
-        // this,SLOT(slot_newMsg()));
-        // emit newClientConnected(adr.toString());
     }
     void MyTCPServer::slot_client_disconnected()
     {
-        // int idx = getClinetID();
-        // m_clients.removeAt(idx);
-        // emit clientDisconnetced(idx);
         QTcpSocket *client = static_cast<QTcpSocket*>(QObject::sender());
         int idx = m_clients.indexOf(client);
         if (idx != -1) {
@@ -149,36 +117,7 @@
     }
     void MyTCPServer::slot_newMsg()
     {
-        // int idx = getClinetID();
-        // QString msg = m_clients.at(idx)->readAll();
-        // emit newMsgFrom(msg, idx);
         QTcpSocket *client = static_cast<QTcpSocket*>(QObject::sender());
-        // int idx = m_clients.indexOf(client);
-        // if (idx == -1) return;
-
-        // QDataStream in(client);
-        // in.setVersion(QDataStream::Qt_6_0);
-
-        // while (true) {
-        //     if (m_expectedSizes[client] == 0) {
-        //         if (client->bytesAvailable() < sizeof(quint32)) return;
-        //         in >> m_expectedSizes[client];
-        //     }
-
-        //     if (client->bytesAvailable() < m_expectedSizes[client]) return;
-
-        //     QByteArray odebraneDane;
-        //     odebraneDane.resize(m_expectedSizes[client]);
-        //     in.readRawData(odebraneDane.data(), m_expectedSizes[client]);
-
-        //     QJsonDocument doc = QJsonDocument::fromJson(odebraneDane);
-        //     if (!doc.isNull() && doc.isObject()) {
-        //         emit newMsgFrom(doc.object(), idx);
-        //     }
-
-        //     m_expectedSizes[client] = 0;
-        //     if (client->bytesAvailable() == 0) break;
-        // }
         if (!client) return;
 
         QDataStream in(client);
@@ -192,7 +131,6 @@
 
             if (client->bytesAvailable() < m_expectedSizes[client]) return;
 
-            // Odczyt pełnej ramki (bez zmieniania logiki wielkości m_expectedSizes)
             quint8 typBajt;
             in >> typBajt;
             TypRamki typ = static_cast<TypRamki>(typBajt);
@@ -259,7 +197,6 @@
     }
 
     void MyTCPServer::wyslijProbkeRegulatora(double u, double w, double e, double p, double i, double d, int numCli) {
-        // UWAGA: dla klienta usuń parametr numCli z ciała funkcji i użyj m_socket
         if (numCli >= m_clients.length() || numCli < 0) return;
         QByteArray ramka; QDataStream out(&ramka, QIODevice::WriteOnly); out.setVersion(QDataStream::Qt_6_0);
         out << (quint32)0 << (quint8)TypRamki::ProbkaOdRegulatora << u << w << e << p << i << d;

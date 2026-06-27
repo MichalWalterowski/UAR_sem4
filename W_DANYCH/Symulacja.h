@@ -82,7 +82,6 @@ public:
     RegulatorPID pobierzRegulator() const;
 
     void ustawTryb(TrybSymulacji tryb);
-    //void odbierzZSieci(double wartosc);
     void odbierzZSieciOdRegulatora(double u, double w, double e, double p, double i, double d);
     void odbierzZSieciOdObiektu(double y);
 
@@ -92,7 +91,6 @@ public:
 signals:
     void krokWykonany();
 
-    //void wyslijDoSieci(double wartosc);
     void wyslijZRegulatoraDoSieci(double u, double w, double e, double p, double i, double d);
     void wyslijZObiektuDoSieci(double y);
     void statusCzasuRzeczywistego(bool wyrabiaSie);

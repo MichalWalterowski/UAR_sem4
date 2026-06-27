@@ -16,20 +16,6 @@
     void MyTCPClient::disconnectFrom() {
         m_socket.close();
     }
-    // void MyTCPClient::sendMsg(const QJsonObject &json) {
-    //     QJsonDocument doc(json);
-    //     QByteArray data = doc.toJson(QJsonDocument::Compact);
-
-    //     QByteArray ramka;
-    //     QDataStream out(&ramka, QIODevice::WriteOnly);
-    //     out.setVersion(QDataStream::Qt_6_0);
-    //     out << (quint32)0;
-    //     out.device()->write(data);
-    //     out.device()->seek(0);
-    //     out << (quint32)(ramka.size() - sizeof(quint32));
-
-    //     m_socket.write(ramka);
-    // }
 
     void MyTCPClient::wyslijKonfigPID(double kp, double ti, double td, int metoda) {
         if (!isConnected()) return;
@@ -38,9 +24,9 @@
         QDataStream out(&ramka, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_6_0);
 
-        out << (quint32)0; // Miejsce na rozmiar
-        out << (quint8)TypRamki::KonfigPID; // Identyfikator ramki
-        out << kp << ti << td << metoda; // Dane
+        out << (quint32)0;
+        out << (quint8)TypRamki::KonfigPID;
+        out << kp << ti << td << metoda;
 
         out.device()->seek(0);
         out << (quint32)(ramka.size() - sizeof(quint32));
@@ -59,7 +45,6 @@
         out << (quint32)0;
         out << (quint8)TypRamki::KonfigARX;
 
-        // Qt z łatwością serializuje QVector, ale dla std::vector musimy to zrobić ręcznie (lub zamienić na QVector)
         out << (quint32)A.size();
         for(double v : A) out << v;
 
@@ -104,7 +89,6 @@
         out << (quint8)TypRamki::SterowanieSymulacja;
         out << (quint8)akcja;
 
-        // Jeśli to zmiana interwału, dopisujemy go do ramki
         if (akcja == Akcja::ZmienInterwal) {
             out << parametr;
         }
@@ -130,19 +114,6 @@
 
             if (m_socket.bytesAvailable() < m_expectedSize) return;
 
-            // QByteArray odebraneDane;
-            // odebraneDane.resize(m_expectedSize);
-            // in.readRawData(odebraneDane.data(), m_expectedSize);
-
-            // QJsonDocument doc = QJsonDocument::fromJson(odebraneDane);
-            // if (!doc.isNull() && doc.isObject()) {
-            //     emit messageReceived(doc.object());
-            // }
-
-            // m_expectedSize = 0;
-            // if (m_socket.bytesAvailable() == 0) break;
-
-            // Mamy pełną ramkę, sprawdzamy jej typ
             quint8 typBajt;
             in >> typBajt;
             TypRamki typ = static_cast<TypRamki>(typBajt);
@@ -218,11 +189,10 @@
         QDataStream out(&ramka, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_6_0);
 
-        out << (quint32)0; // Miejsce na rozmiar ramki
-        out << (quint8)TypRamki::ProbkaOdObiektu; // Typ ramki
-        out << y; // Nasza próbka (u lub y)
+        out << (quint32)0;
+        out << (quint8)TypRamki::ProbkaOdObiektu;
+        out << y;
 
-        // Wpisanie właściwego rozmiaru na początek
         out.device()->seek(0);
         out << (quint32)(ramka.size() - sizeof(quint32));
 

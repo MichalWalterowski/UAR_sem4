@@ -7,8 +7,8 @@ enum class TypRamki : quint8 {
     KonfigARX = 1,
     KonfigPID = 2,
     KonfigGeneratora = 3,
-    SterowanieSymulacja = 4, // np. start, stop, interwal
-    ProbkaOdRegulatora = 5,      // Przesyłanie y (wyjście) i u (sterowanie)
+    SterowanieSymulacja = 4,
+    ProbkaOdRegulatora = 5,
     ProbkaOdObiektu = 6
 };
 
